@@ -545,7 +545,7 @@ export function App() {
   // --- Handlers: Backup & System Reset ---
 
   const handleResetData = () => {
-    const initial = resetToInitialData();
+    const initial = resetToInitialData(officeSettings);
     setProperties(initial.properties);
     setArchivedProperties(initial.archivedProperties);
     setContracts(initial.contracts);

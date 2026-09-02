@@ -159,7 +159,7 @@ export function generateNextClientId(existingClients: ClientRequest[]): string {
   return `REQ-${nextNum}`;
 }
 
-export function resetToInitialData(): {
+export function resetToInitialData(currentSettings?: OfficeSettings): {
   properties: Property[];
   archivedProperties: Property[];
   contracts: Contract[];
@@ -170,20 +170,26 @@ export function resetToInitialData(): {
   localStorage.removeItem(STORAGE_KEYS.ARCHIVED_PROPERTIES);
   localStorage.removeItem(STORAGE_KEYS.CLIENT_REQUESTS);
   localStorage.removeItem(STORAGE_KEYS.CONTRACTS);
-  localStorage.removeItem(STORAGE_KEYS.OFFICE_SETTINGS);
+  
+  const settings = currentSettings || defaultOfficeSettings;
+  if (!currentSettings) {
+    localStorage.removeItem(STORAGE_KEYS.OFFICE_SETTINGS);
+    saveOfficeSettings(defaultOfficeSettings);
+  } else {
+    saveOfficeSettings(currentSettings);
+  }
 
-  saveProperties(defaultActiveProperties);
-  saveArchivedProperties(defaultArchivedProperties);
-  saveClientRequests(initialClientRequests);
-  saveContracts(initialContracts);
-  saveOfficeSettings(defaultOfficeSettings);
+  saveProperties([]);
+  saveArchivedProperties([]);
+  saveClientRequests([]);
+  saveContracts([]);
 
   return {
-    properties: defaultActiveProperties,
-    archivedProperties: defaultArchivedProperties,
-    contracts: initialContracts,
-    clientRequests: initialClientRequests,
-    officeSettings: defaultOfficeSettings,
+    properties: [],
+    archivedProperties: [],
+    contracts: [],
+    clientRequests: [],
+    officeSettings: settings,
   };
 }
 
