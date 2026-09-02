@@ -118,7 +118,7 @@ export function App() {
   const [passcodeError, setPasscodeError] = useState('');
 
   // Subscription States & Calculations
-  const isDeveloperCopy = import.meta.env.VITE_IS_DEVELOPER_COPY === 'true';
+  const isDeveloperCopy = import.meta.env.VITE_IS_DEVELOPER_COPY === 'true' || import.meta.env.VITE_IS_DEVELOPER_COPY === '12333';
   const subRemainingDays = subscription ? getRemainingDays(subscription.expiryDate) : 30;
   const isSubExpired = isDeveloperCopy ? false : (subscription ? subRemainingDays < 0 : false);
 
