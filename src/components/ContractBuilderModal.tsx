@@ -1219,8 +1219,7 @@ export function ContractBuilderModal({
                     </div>
                     
                     <div className="w-1/3 text-center">
-                      <h1 className="text-3xl font-black text-[#991b1b] tracking-wider">عقد إيجار</h1>
-                      <span className="text-[12px] text-amber-800 font-bold block mt-0.5 tracking-widest">مجموعة مكاتب الرافدين العقارية</span>
+                      <h1 className="text-3xl font-black text-[#991b1b] tracking-wider py-1">عقد إيجار</h1>
                     </div>
 
                     <div className="w-1/3 flex flex-col items-center justify-center">
