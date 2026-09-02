@@ -1207,12 +1207,12 @@ export function ContractBuilderModal({
                   <div className="max-w-[210mm] mx-auto bg-white border-[16px] border-double border-[#854d0e] p-0 shadow-lg print-container relative text-slate-950 select-text overflow-hidden" style={{ minHeight: '297mm' }}>
                     
                     {/* Main outer content block */}
-                    <div className="p-6 sm:p-8 space-y-4 flex flex-col justify-between" style={{ minHeight: '290mm' }}>
+                    <div className="p-6 sm:p-10 space-y-5 flex flex-col justify-between pb-16" style={{ minHeight: '282mm' }}>
                 
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {/* Classical Traditional Arabic Header */}
                   <div className="flex justify-between items-center border-b-2 border-amber-800 pb-3">
-                    <div className="w-1/3 text-right text-[10px] text-slate-600 font-bold space-y-0.5">
+                    <div className="w-1/3 text-right text-[12px] text-slate-600 font-bold space-y-1">
                       <p>المحافظة: <span className="text-slate-900 font-black">{province}</span></p>
                       <p>المنطقة: <span className="text-slate-900 font-black">{district}</span></p>
                       <p>المحلة: <span className="text-slate-900 font-black">{mahalla || '........'}</span></p>
@@ -1220,11 +1220,11 @@ export function ContractBuilderModal({
                     
                     <div className="w-1/3 text-center">
                       <h1 className="text-3xl font-black text-[#991b1b] tracking-wider">عقد إيجار</h1>
-                      <span className="text-[10px] text-amber-800 font-bold block mt-0.5 tracking-widest">مجموعة مكاتب الرافدين العقارية</span>
+                      <span className="text-[12px] text-amber-800 font-bold block mt-0.5 tracking-widest">مجموعة مكاتب الرافدين العقارية</span>
                     </div>
 
                     <div className="w-1/3 flex flex-col items-center justify-center">
-                      <span className="text-red-600 font-bold text-xs">No. {contractId.replace('CT-', '') || '001818'}</span>
+                      <span className="text-red-600 font-bold text-sm">No. {contractId.replace('CT-', '') || '001818'}</span>
                       {qrCodeUrl ? (
                         <div className="mt-1 p-0.5 bg-white border border-amber-800 rounded shadow-sm">
                           <img src={qrCodeUrl} alt="Verification QR" className="w-12 h-12" />
@@ -1236,29 +1236,29 @@ export function ContractBuilderModal({
                   </div>
 
                   {/* Header metadata lines */}
-                  <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-xs font-bold pt-1.5">
+                  <div className="grid grid-cols-2 gap-y-3 gap-x-6 text-[13.5px] font-bold pt-2">
                     <div className="flex items-end gap-1">
                       <span className="shrink-0 text-slate-700">تسلسل العقار:</span>
-                      <span className="flex-grow border-b border-dotted border-slate-700 font-extrabold text-blue-900 px-2">
+                      <span className="flex-grow border-b border-dotted border-slate-700 font-extrabold text-blue-900 px-2 text-[14px]">
                         {registrationNo || '..........................................................'}
                       </span>
                     </div>
                     <div className="flex items-end gap-1">
                       <span className="shrink-0 text-slate-700">رقم الأبواب:</span>
-                      <span className="flex-grow border-b border-dotted border-slate-700 font-extrabold text-blue-900 px-2 text-center">
+                      <span className="flex-grow border-b border-dotted border-slate-700 font-extrabold text-blue-900 px-2 text-center text-[14px]">
                         {houseNo || '..........................................................'}
                       </span>
                     </div>
                     <div className="flex items-end gap-1 col-span-2">
                       <span className="shrink-0 text-slate-700">الطرف الأول:</span>
-                      <span className="flex-grow border-b border-dotted border-slate-700 font-extrabold text-[#991b1b] text-xs px-2">
+                      <span className="flex-grow border-b border-dotted border-slate-700 font-extrabold text-[#991b1b] text-[14.5px] px-2">
                         {sellerName || '....................................................................................................'}
                       </span>
                       <span className="shrink-0 text-slate-500 font-bold">/ المدعو المؤجر</span>
                     </div>
                     <div className="flex items-end gap-1 col-span-2">
                       <span className="shrink-0 text-slate-700">الطرف الثاني:</span>
-                      <span className="flex-grow border-b border-dotted border-slate-700 font-extrabold text-[#1e3a8a] text-xs px-2">
+                      <span className="flex-grow border-b border-dotted border-slate-700 font-extrabold text-[#1e3a8a] text-[14.5px] px-2">
                         {buyerName || '....................................................................................................'}
                       </span>
                       <span className="shrink-0 text-slate-500 font-bold">/ المدعو المستأجر</span>
@@ -1266,12 +1266,12 @@ export function ContractBuilderModal({
                   </div>
 
                   {/* Main Paragraph Declaration */}
-                  <p className="text-[11px] text-justify leading-relaxed font-extrabold border-t border-slate-200 pt-2 text-slate-900">
+                  <p className="text-[13px] text-justify leading-relaxed font-extrabold border-t border-slate-200 pt-3 text-slate-900">
                     أن الطرف الأول (المؤجر) قد أجر الى الطرف الثاني (المستأجر) بعد الرؤية والاطلاع العقار الموصوف أعلاه جنسه ( <span className="text-[#991b1b] underline font-black">{propType || '..................'}</span> ) لاتخاذه ( <span className="text-blue-900 underline font-black">{rentUsage || '..................'}</span> ) ببدل ايجار شهري قدره ( <span className="text-emerald-800 underline font-black">{totalAmount ? `${formatPrice(totalAmount, 'IQD')} (${tafqit(totalAmount)})` : '.............................................'}</span> ) ابتداءً من <span className="font-mono text-blue-900 underline">{rentStartDayStr} / {rentStartMonthStr} / ٢٠٢{rentStartYearStr} م</span> وفقاً للشروط الآتية :
                   </p>
 
                   {/* The 14 Terms exactly from printed image */}
-                  <div className="space-y-1 text-[9.5px] text-justify leading-normal text-slate-800 pr-1 select-text font-semibold">
+                  <div className="space-y-2 text-[11px] text-justify leading-relaxed text-slate-800 pr-1 select-text font-semibold">
                     <p><strong>١.</strong> لا يحق للمستأجر استعماله لغير الغرض المبين في العقد الا بموافقة المؤجر التحريرية بعد ان شاهد المستأجر المأجور واطلع عليه كاملاً وقبله وتسلمه بحالته الكاملة عند الاستلام.</p>
                     <p><strong>٢.</strong> لا يجوز للمستأجر أجراء أي تغيير في المأجور مهما كان نوعه الا بعد حصول موافقة المؤجر التحريرية عند ذلك تكون كلفة التغيير على المستأجر ولا يحق له الرجوع بها على المؤجر كما لا يحق له ان يلغي هذا التغيير او المطالبة بكلفته في حالة ترك المأجور لأي سبب كان وكذلك الترميمات والاصلاح والصبغ والديكورات والتغليف وما شابه ذلك والتي يقوم بها المستأجر فتكون على نفقته الخاصة وليس له الحق بالرجوع بها على المؤجر لا قائمة ولا مستحقة للقلع.</p>
                     <p><strong>٣.</strong> لا يجوز للمستأجر الايجار من الباطن او التنازل عن المأجور كلاً أو جزءاً كما لا يجوز مشاركة غيره في المأجور الا بموافقة المؤجر التحريرية وبخلافه يعد ذلك اخلالاً بالعقد.</p>
@@ -1285,14 +1285,14 @@ export function ContractBuilderModal({
                     <p><strong>١١.</strong> ان المستأجر مسؤول عن تأشير هذا العقد في الدوائر المختصة ذات العلاقة.</p>
                     <p><strong>١٢.</strong> ان المستأجر اعلاه اقر واعترف وأويد باني لم ادفع أي مبلغ الى مالك العقار (المؤجر) عند ابرام العقد او بعد ذلك عدا الايجار المنصوص عليه في هذا العقد والله على ما اقول شهيد.</p>
                     <p><strong>١٣.</strong> ان ضريبة العقار من مسؤولية المؤجر.</p>
-                    <p className="font-extrabold text-[#b45309]"><strong>١٤.</strong> حرر هذا العقد بثلاث نسخ ووقع في بغداد واستلم كل طرف نسخة منه بتاريخ : <span className="font-mono text-blue-950 underline">{dayStr} / {monthStr} / ٢٠٢{yearStr} م</span></p>
+                    <p className="font-extrabold text-[#b45309] text-[11.5px] mt-1"><strong>١٤.</strong> حرر هذا العقد بثلاث نسخ ووقع في بغداد واستلم كل طرف نسخة منه بتاريخ : <span className="font-mono text-blue-950 underline">{dayStr} / {monthStr} / ٢٠٢{yearStr} م</span></p>
                   </div>
 
                   {/* Additional/Custom Paragraphs (y) */}
                   {(extraLine1 || extraLine2 || extraLine3) && (
-                    <div className="pt-1.5 border-t border-dashed border-amber-800/40">
-                      <p className="font-bold text-slate-950 text-[10px] mb-0.5">شروط إضافية خاصة متفق عليها بين الطرفين :</p>
-                      <ul className="list-disc list-inside space-y-0.5 pr-2 font-semibold text-slate-800 text-[9.5px]">
+                    <div className="pt-2.5 border-t border-dashed border-amber-800/40 mt-1">
+                      <p className="font-bold text-slate-950 text-[12px] mb-1">شروط إضافية خاصة متفق عليها بين الطرفين :</p>
+                      <ul className="list-disc list-inside space-y-1 pr-2 font-semibold text-slate-800 text-[11px]">
                         {extraLine1 && <li>{extraLine1}</li>}
                         {extraLine2 && <li>{extraLine2}</li>}
                         {extraLine3 && <li>{extraLine3}</li>}
@@ -1302,39 +1302,39 @@ export function ContractBuilderModal({
                 </div>
 
                 {/* Bottom Signatures section mirroring the actual sheet */}
-                <div className="pt-3 border-t-2 border-amber-800 grid grid-cols-4 gap-3 text-[9px] text-slate-950">
+                <div className="pt-4 border-t-2 border-amber-800 grid grid-cols-4 gap-3 text-[10.5px] text-slate-950">
                   {/* Seller/Landlord block */}
-                  <div className="border border-amber-800/30 p-2 rounded bg-amber-50/5 space-y-0.5">
-                    <span className="block font-black text-[#991b1b] text-[10px] border-b border-amber-800/20 pb-0.5 text-center">الطرف الاول (المؤجر)</span>
+                  <div className="border border-amber-800/40 p-2.5 rounded bg-amber-50/5 space-y-1">
+                    <span className="block font-black text-[#991b1b] text-[11.5px] border-b border-amber-800/20 pb-0.5 text-center">الطرف الاول (المؤجر)</span>
                     <p className="truncate">الاسم: <strong className="text-slate-900">{sellerName || '...................'}</strong></p>
                     <p className="truncate">رقم الهوية: <span className="font-mono text-slate-700">{sellerIdNumber || '...................'}</span></p>
                     <p className="truncate">الموبايل: <span className="font-mono text-slate-700">{sellerPhone || '...................'}</span></p>
-                    <p className="pt-2 text-[8px] text-slate-400 text-center">التوقيع والبصمة:</p>
+                    <p className="pt-2 text-[8.5px] text-slate-400 text-center font-bold">التوقيع والبصمة:</p>
                   </div>
 
                   {/* Witness 1 */}
-                  <div className="border border-amber-800/30 p-2 rounded bg-amber-50/5 space-y-0.5">
-                    <span className="block font-black text-slate-900 text-[10px] border-b border-amber-800/20 pb-0.5 text-center">الشاهد الأول</span>
+                  <div className="border border-amber-800/40 p-2.5 rounded bg-amber-50/5 space-y-1">
+                    <span className="block font-black text-slate-900 text-[11.5px] border-b border-amber-800/20 pb-0.5 text-center">الشاهد الأول</span>
                     <p className="truncate">الاسم: <strong className="text-slate-900">{witness1Name || '...................'}</strong></p>
                     <p className="truncate">الموبايل: <span className="font-mono text-slate-700">{witness1Phone || '...................'}</span></p>
-                    <p className="pt-2 text-[8px] text-slate-400 text-center">التوقيع والبصمة:</p>
+                    <p className="pt-3.5 text-[8.5px] text-slate-400 text-center font-bold">التوقيع والبصمة:</p>
                   </div>
 
                   {/* Witness 2 */}
-                  <div className="border border-amber-800/30 p-2 rounded bg-amber-50/5 space-y-0.5">
-                    <span className="block font-black text-slate-900 text-[10px] border-b border-amber-800/20 pb-0.5 text-center">الشاهد الثاني</span>
+                  <div className="border border-amber-800/40 p-2.5 rounded bg-amber-50/5 space-y-1">
+                    <span className="block font-black text-slate-900 text-[11.5px] border-b border-amber-800/20 pb-0.5 text-center">الشاهد الثاني</span>
                     <p className="truncate">الاسم: <strong className="text-slate-900">{witness2Name || '...................'}</strong></p>
                     <p className="truncate">الموبايل: <span className="font-mono text-slate-700">{witness2Phone || '...................'}</span></p>
-                    <p className="pt-2 text-[8px] text-slate-400 text-center">التوقيع والبصمة:</p>
+                    <p className="pt-3.5 text-[8.5px] text-slate-400 text-center font-bold">التوقيع والبصمة:</p>
                   </div>
 
                   {/* Buyer/Tenant block */}
-                  <div className="border border-amber-800/30 p-2 rounded bg-amber-50/5 space-y-0.5">
-                    <span className="block font-black text-blue-900 text-[10px] border-b border-amber-800/20 pb-0.5 text-center">الطرف الثاني (المستأجر)</span>
+                  <div className="border border-amber-800/40 p-2.5 rounded bg-amber-50/5 space-y-1">
+                    <span className="block font-black text-blue-900 text-[11.5px] border-b border-amber-800/20 pb-0.5 text-center">الطرف الثاني (المستأجر)</span>
                     <p className="truncate">الاسم: <strong className="text-slate-900">{buyerName || '...................'}</strong></p>
                     <p className="truncate">رقم الهوية: <span className="font-mono text-slate-700">{buyerIdNumber || '...................'}</span></p>
                     <p className="truncate">الموبايل: <span className="font-mono text-slate-700">{buyerPhone || '...................'}</span></p>
-                    <p className="pt-2 text-[8px] text-slate-400 text-center">التوقيع والبصمة:</p>
+                    <p className="pt-2 text-[8.5px] text-slate-400 text-center font-bold">التوقيع والبصمة:</p>
                   </div>
                 </div>
 
