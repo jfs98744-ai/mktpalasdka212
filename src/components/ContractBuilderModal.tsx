@@ -256,15 +256,15 @@ export function ContractBuilderModal({
     initialContract?.witnesses?.[1]?.idNumber || 'وطنية/٠٠٩٨٤٥١٢'
   );
 
-  // Custom Clauses (for paragraph y in contract image)
+  // Custom Clauses (for additional notes/remarks)
   const [extraLine1, setExtraLine1] = useState(
-    initialContract?.terms?.[5] || 'يلتزم الطرفان بالحضور أمام مديرية التسجيل العقاري المختصة لإتمام التنازل ونقل الملكية.'
+    initialContract?.terms?.[5] || ''
   );
   const [extraLine2, setExtraLine2] = useState(
-    initialContract?.terms?.[6] || 'يتحمل الطرف المتسبب بالنكول كافة المصاريف القانونية وأتعاب الدلالية بالكامل للمكتب العقاري.'
+    initialContract?.terms?.[6] || ''
   );
   const [extraLine3, setExtraLine3] = useState(
-    initialContract?.terms?.[7] || 'تم تحرير هذا العقد من نسختين بيد كل طرف نسخة للعمل بموجبها عند الحاجة.'
+    initialContract?.terms?.[7] || ''
   );
 
   // UI Modes
@@ -1134,7 +1134,11 @@ export function ContractBuilderModal({
               <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
                 <h3 className="text-xs font-bold text-slate-900 flex items-center gap-1.5 pb-2 border-b border-slate-100">
                   <Sparkles className="w-4 h-4 text-amber-500" />
-                  <span>رابعاً: ي - فقرات إضافية اختيارية تكتب أسفل ورقة العقد</span>
+                  <span>
+                    {contractType === 'sale_deed' 
+                      ? 'رابعاً: ملاحظات إضافية خاصة تكتب أسفل ورقة العقد (اختياري)' 
+                      : 'رابعاً: ي - فقرات إضافية اختيارية تكتب أسفل ورقة العقد'}
+                  </span>
                 </h3>
 
                 <div className="space-y-2">
@@ -1142,23 +1146,25 @@ export function ContractBuilderModal({
                     type="text"
                     value={extraLine1}
                     onChange={(e) => setExtraLine1(e.target.value)}
-                    placeholder="الفقرة الإضافية الأولى"
+                    placeholder={contractType === 'sale_deed' ? 'الملاحظة الإضافية الأولى' : 'الفقرة الإضافية الأولى'}
                     className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
                   />
                   <input
                     type="text"
                     value={extraLine2}
                     onChange={(e) => setExtraLine2(e.target.value)}
-                    placeholder="الفقرة الإضافية الثانية"
+                    placeholder={contractType === 'sale_deed' ? 'الملاحظة الإضافية الثانية' : 'الفقرة الإضافية الثانية'}
                     className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
                   />
-                  <input
-                    type="text"
-                    value={extraLine3}
-                    onChange={(e) => setExtraLine3(e.target.value)}
-                    placeholder="الفقرة الإضافية الثالثة"
-                    className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
-                  />
+                  {contractType !== 'sale_deed' && (
+                    <input
+                      type="text"
+                      value={extraLine3}
+                      onChange={(e) => setExtraLine3(e.target.value)}
+                      placeholder="الفقرة الإضافية الثالثة"
+                      className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+                    />
+                  )}
                 </div>
               </div>
 
@@ -1549,27 +1555,36 @@ export function ContractBuilderModal({
                         </div>
                       </div>
 
-                      {/* Standard Fixed Sequential Clauses (ز, ح, ط, ي, ك) */}
-                      <div className="space-y-2 pt-2 text-[11px] leading-relaxed border-t border-slate-100">
-                        <p><strong>ز -</strong> يلتزم الطرفان بالحضور امام مديريات التسجيل العقاري والدوائر التابعه لها الأمانة والضريبه.</p>
-                        <p><strong>ح -</strong> يتحمل الطرفان كافة المصاريف القانونية وأتعاب الدلالية بالكامل للمكتب العقاري.</p>
-                        <p><strong>ط -</strong> كل مكاتبة غير مختومة بختم مكتب الأصدقاء للعقار المعتمد تعتبر باطلة وغير معترف بها.</p>
-                        <p><strong>ي -</strong> لا تسترجع الدلالية وأجور الوساطة عند حصول أي خلاف بين الطرفين بعد توقيع وإبرام العقد في مجلسنا.</p>
-                        <p><strong>ك -</strong> نسبة أجور دلالية ووساطة المكتب المستحقة هي ٢٪ وتدفع {commissionPaidBy === 'split' ? 'مناصفة بين الطرفين' : commissionPaidBy === 'buyer' ? 'على المشتري كاملاً' : 'على البائع كاملاً'}.</p>
+                      {/* Standard Fixed Sequential Clauses (1 to 7) */}
+                      <div className="space-y-1.5 pt-2 text-[11px] leading-relaxed border-t border-slate-100 text-right" dir="rtl">
+                        <p><strong>١ -</strong> كل مكاتبة غير مختومة بختم المكتب تعتبر باطلة.</p>
+                        <p><strong>٢ -</strong> يلتزم الطرفان بالحضور أمام مديريات التسجيل العقاري والدوائر التابعة لها.</p>
+                        <p><strong>٣ -</strong> يتحمل الطرفان كافة المصاريف القانونية وأتعاب الدلالية بالكامل للمكتب العقاري.</p>
+                        <p><strong>٤ -</strong> نسبة أجور الدلالية ووساطة المكتب المستحقة هي ٢٪ وتدفع مناصفة بين الطرفين ولا تسترجع عند حصول أي خلاف بين الطرفين.</p>
+                        <p><strong>٥ -</strong> تم تحرير هذا العقد من نسختين بيد كل طرف نسخة للعمل بموجبها عند الحاجة.</p>
+                        <p><strong>٦ -</strong> يتحمل البائع رسوم الأمانة والضريبة وجباية الماء والكهرباء.</p>
+                        <p><strong>٧ -</strong> يتحمل المشتري رسوم الشراء وتعقيب المعاملة.</p>
                       </div>
                     </div>
 
-                    {/* Additional Custom Paragraphs */}
-                    {(extraLine1 || extraLine2 || extraLine3) && (
-                      <div className="pt-2 border-t border-dashed border-slate-300 mt-2">
-                        <p className="font-bold text-slate-950 mb-1 text-[11px]">ملاحظات وشروط إضافية خاصة :</p>
-                        <ul className="list-disc list-inside space-y-0.5 pr-2 font-semibold text-slate-800 text-[10.5px]">
-                          {extraLine1 && <li>{extraLine1}</li>}
-                          {extraLine2 && <li>{extraLine2}</li>}
-                          {extraLine3 && <li>{extraLine3}</li>}
-                        </ul>
+                    {/* Additional Custom Remarks Section */}
+                    <div className="pt-2 border-t border-dashed border-slate-300 mt-2 text-right" dir="rtl">
+                      <p className="font-bold text-slate-950 mb-1.5 text-[11px]">( ملاحظات إضافية ( خاصة )</p>
+                      <div className="space-y-1.5 text-slate-800 text-[10.5px] font-semibold pr-1">
+                        <div className="flex items-center gap-1">
+                          <span className="shrink-0">١.</span>
+                          <span className="flex-1 border-b border-dotted border-slate-500 pb-0.5 text-right font-bold text-blue-900 min-h-[16px] px-2">
+                            {extraLine1 || '_________________________________________________________________________________'}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="shrink-0">٢.</span>
+                          <span className="flex-1 border-b border-dotted border-slate-500 pb-0.5 text-right font-bold text-blue-900 min-h-[16px] px-2">
+                            {extraLine2 || '_________________________________________________________________________________'}
+                          </span>
+                        </div>
                       </div>
-                    )}
+                    </div>
 
                   </div>
                 </div>
