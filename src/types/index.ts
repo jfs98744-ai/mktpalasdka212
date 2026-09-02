@@ -170,3 +170,12 @@ export interface OfficeSettings {
   autoArchiveOnSale?: boolean;
   appPasscode?: string;
 }
+
+export interface SubscriptionInfo {
+  status: 'active' | 'expired';
+  expiryDate: string; // YYYY-MM-DD
+  developerPhone: string;
+  developerName: string;
+  licenseKey?: string;
+}
+

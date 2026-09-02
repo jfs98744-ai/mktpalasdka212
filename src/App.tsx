@@ -25,7 +25,8 @@ import {
   Contract, 
   OfficeSettings, 
   SaleDetails, 
-  ReservationDetails 
+  ReservationDetails,
+  SubscriptionInfo
 } from './types';
 import {
   loadProperties,
@@ -43,6 +44,13 @@ import {
   resetToInitialData,
 } from './utils/storage';
 import { useFirebaseSync } from './utils/firebaseSync';
+import { 
+  verifyLicenseKey, 
+  getExpiryDateFromKey, 
+  getRemainingDays, 
+  generateLicenseKey 
+} from './utils/license';
+import { Key, Shield, Clock, Phone, Sparkles, Check, Copy } from 'lucide-react';
 
 export function App() {
   // Navigation
@@ -64,6 +72,7 @@ export function App() {
   const [clientRequests, setClientRequests] = useState<ClientRequest[]>(loadClientRequests);
   const [contracts, setContracts] = useState<Contract[]>(loadContracts);
   const [officeSettings, setOfficeSettings] = useState<OfficeSettings>(loadOfficeSettings);
+  const [subscription, setSubscription] = useState<SubscriptionInfo | null>(null);
 
   // Sync with Firebase Firestore in real-time
   useFirebaseSync(
@@ -76,7 +85,9 @@ export function App() {
     contracts,
     setContracts,
     officeSettings,
-    setOfficeSettings
+    setOfficeSettings,
+    subscription,
+    setSubscription
   );
 
   // Selected Entity Modals
@@ -105,6 +116,72 @@ export function App() {
   });
   const [passcodeInput, setPasscodeInput] = useState('');
   const [passcodeError, setPasscodeError] = useState('');
+
+  // Subscription States & Calculations
+  const isDeveloperCopy = import.meta.env.VITE_IS_DEVELOPER_COPY === 'true';
+  const subRemainingDays = subscription ? getRemainingDays(subscription.expiryDate) : 30;
+  const isSubExpired = isDeveloperCopy ? false : (subscription ? subRemainingDays < 0 : false);
+
+  const [activationCode, setActivationCode] = useState('');
+  const [activationError, setActivationError] = useState('');
+  const [activationSuccess, setActivationSuccess] = useState(false);
+
+  const handleActivateSubscription = (e: React.FormEvent) => {
+    if (e) e.preventDefault();
+    
+    // Emergency developer bypass: Entering "07712" directly on the lock screen grants 100 years!
+    if (activationCode.trim() === '07712') {
+      if (subscription) {
+        const farFuture = new Date();
+        farFuture.setFullYear(farFuture.getFullYear() + 100);
+        const yyyy = farFuture.getFullYear();
+        const mm = String(farFuture.getMonth() + 1).padStart(2, '0');
+        const dd = String(farFuture.getDate()).padStart(2, '0');
+        
+        const updatedSub: SubscriptionInfo = {
+          ...subscription,
+          expiryDate: `${yyyy}-${mm}-${dd}`,
+          status: 'active',
+          licenseKey: 'AQAR-DEVELOPER-BYPASS',
+        };
+        setSubscription(updatedSub);
+        setActivationSuccess(true);
+        setActivationError('');
+        setActivationCode('');
+        setTimeout(() => {
+          setActivationSuccess(false);
+        }, 3000);
+      }
+      return;
+    }
+
+    if (!verifyLicenseKey(activationCode)) {
+      setActivationError('كود التفعيل غير صالح! يرجى التأكد من كتابة الرمز بشكل صحيح.');
+      return;
+    }
+
+    const newExpiry = getExpiryDateFromKey(activationCode);
+    if (!newExpiry) {
+      setActivationError('فشل استخراج تاريخ الصلاحية من الكود.');
+      return;
+    }
+
+    if (subscription) {
+      const updatedSub: SubscriptionInfo = {
+        ...subscription,
+        expiryDate: newExpiry,
+        status: 'active',
+        licenseKey: activationCode,
+      };
+      setSubscription(updatedSub);
+      setActivationSuccess(true);
+      setActivationError('');
+      setActivationCode('');
+      setTimeout(() => {
+        setActivationSuccess(false);
+      }, 3000);
+    }
+  };
 
   const handleUnlock = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -595,6 +672,99 @@ export function App() {
     );
   }
 
+  if (isSubExpired) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 text-right select-none font-sans" dir="rtl">
+        <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-center">
+          
+          {/* Header & Logo */}
+          <div className="space-y-3">
+            <div className="w-16 h-16 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
+              <Clock className="w-8 h-8 animate-pulse" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-white font-sans">{officeSettings.officeName}</h2>
+              <p className="text-xs text-red-400 mt-1">⚠️ انتهت فترة صلاحية اشتراك التطبيق السحابي</p>
+            </div>
+          </div>
+
+          {/* Warning Message */}
+          <div className="space-y-2 bg-red-950/20 border border-red-500/10 rounded-2xl p-4 text-right">
+            <span className="inline-block px-3 py-1 bg-red-500/10 text-red-500 border border-red-500/20 rounded-full text-[11px] font-bold text-center w-full">
+              انتهى ترخيص تشغيل النظام
+            </span>
+            <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+              نأسف لإبلاغكم بأن الاشتراك الشهري/السنوي الخاص بمكتبكم قد انتهى صلاحيته في تاريخ <span className="font-bold text-red-400 font-mono">{subscription?.expiryDate}</span>.
+            </p>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              لاستعادة الوصول إلى لوحة تحكم العقارات والعقود والزبائن، يرجى التواصل مع مطور النظام لتفعيل كود التجديد الجديد.
+            </p>
+          </div>
+
+          {/* Contact Developer */}
+          <div className="bg-slate-950/60 p-4 rounded-2xl border border-slate-800 text-right space-y-2.5">
+            <span className="text-[11px] text-slate-500 block">معلومات الدعم الفني والتجديد:</span>
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-slate-300">المهندس المطور:</span>
+              <span className="text-xs font-bold text-amber-500">{subscription?.developerName || 'مطور النظام'}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-slate-300">رقم الهاتف للتواصل:</span>
+              <a href={`tel:${subscription?.developerPhone}`} className="text-xs font-bold text-emerald-400 font-mono hover:underline flex items-center gap-1" dir="ltr">
+                <Phone className="w-3.5 h-3.5" />
+                <span>{subscription?.developerPhone || '07712345678'}</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Enter Renewal Activation Code */}
+          <form onSubmit={handleActivateSubscription} className="space-y-4 text-right">
+            <div>
+              <label className="block text-xs font-bold text-slate-300 mb-1.5 flex items-center gap-1 justify-end">
+                <span>تفعيل كود التجديد الجديد</span>
+                <Key className="w-3.5 h-3.5 text-amber-500" />
+              </label>
+              <input
+                type="text"
+                placeholder="أدخل كود التفعيل هنا (AQAR-YYYYMMDD-XXXX)..."
+                value={activationCode}
+                onChange={(e) => {
+                  setActivationCode(e.target.value);
+                  setActivationError('');
+                }}
+                className="w-full py-3.5 px-4 bg-slate-950 border border-slate-800 rounded-2xl text-center text-xs font-bold font-mono text-amber-500 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all"
+              />
+            </div>
+
+            {activationError && (
+              <p className="text-xs text-red-400 font-bold bg-red-500/10 border border-red-500/20 py-2 rounded-xl text-center">
+                ⚠️ {activationError}
+              </p>
+            )}
+
+            {activationSuccess && (
+              <p className="text-xs text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20 py-2 rounded-xl text-center">
+                🎉 تم تفعيل التجديد وفتح النظام بنجاح!
+              </p>
+            )}
+
+            <button
+              type="submit"
+              className="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-2xl text-sm shadow-lg shadow-amber-500/10 active:scale-[0.98] transition-all"
+            >
+              تفعيل الاشتراك الآن
+            </button>
+          </form>
+
+          {/* Footer message */}
+          <p className="text-[10px] text-slate-500 pt-2">
+            بوابة تجديد التراخيص الآمنة • جميع الحقوق محفوظة لـ {subscription?.developerName || 'مطور النظام'}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   const isLocked = officeSettings.appPasscode && officeSettings.appPasscode.trim() !== '' && !isUnlocked;
 
   if (isLocked) {
@@ -717,6 +887,20 @@ export function App() {
         clientCount={clientRequests.filter((c) => c.status === 'active').length}
         contractCount={contracts.length}
       />
+
+      {/* Subscription Expiry Warning Banner */}
+      {!isDeveloperCopy && subscription && subRemainingDays >= 0 && subRemainingDays <= 7 && (
+        <div className="bg-amber-500 text-slate-950 font-bold px-4 py-2.5 text-xs text-center flex items-center justify-center gap-2 shadow-sm animate-pulse" dir="rtl">
+          <Clock className="w-4 h-4 text-slate-950" />
+          <span>تنبيه الاشتراك: متبقي {subRemainingDays === 0 ? 'أقل من يوم' : `${subRemainingDays} أيام`} فقط على انتهاء ترخيص التطبيق السحابي. يرجى التواصل مع الدعم الفني لتفعيل كود التجديد وتفادي إغلاق النظام.</span>
+          <button 
+            onClick={() => setIsSettingsOpen(true)} 
+            className="px-2.5 py-1 bg-slate-950 text-white rounded font-sans text-[10px] font-bold hover:bg-slate-900 transition-colors mr-2 cursor-pointer"
+          >
+            إدخال كود التجديد 🔑
+          </button>
+        </div>
+      )}
 
       {/* Main Viewport Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
@@ -889,6 +1073,8 @@ export function App() {
         contracts={contracts}
         clientRequests={clientRequests}
         onImportData={handleImportData}
+        subscription={subscription}
+        onUpdateSubscription={setSubscription}
       />
 
     </div>

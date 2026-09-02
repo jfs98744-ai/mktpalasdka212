@@ -13,7 +13,8 @@ import {
   RotateCcw,
   Percent
 } from 'lucide-react';
-import { OfficeSettings, Property, Contract, ClientRequest } from '../types';
+import { OfficeSettings, Property, Contract, ClientRequest, SubscriptionInfo } from '../types';
+import { generateLicenseKey, getRemainingDays } from '../utils/license';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -32,6 +33,8 @@ interface SettingsModalProps {
     clientRequests: ClientRequest[];
     officeSettings: OfficeSettings;
   }) => void;
+  subscription: SubscriptionInfo | null;
+  onUpdateSubscription: (sub: SubscriptionInfo) => void;
 }
 
 export function SettingsModal({
@@ -45,6 +48,8 @@ export function SettingsModal({
   contracts,
   clientRequests,
   onImportData,
+  subscription,
+  onUpdateSubscription,
 }: SettingsModalProps) {
   if (!isOpen) return null;
 
@@ -60,6 +65,20 @@ export function SettingsModal({
   const [defaultCommissionPercentage, setDefaultCommissionPercentage] = useState(
     officeSettings.defaultCommissionPercentage
   );
+
+  // Developer Authorization & Licensing States
+  const [isDevUnlocked, setIsDevUnlocked] = useState(false);
+  const [devPasscodeInput, setDevPasscodeInput] = useState('');
+  const [devPasscodeError, setDevPasscodeError] = useState('');
+  const [genMonths, setGenMonths] = useState<number>(1);
+  const [generatedKey, setGeneratedKey] = useState('');
+  const [copied, setCopied] = useState(false);
+  
+  // Dev admin controls
+  const [devPhone, setDevPhone] = useState(subscription?.developerPhone || '07712345678');
+  const [devName, setDevName] = useState(subscription?.developerName || 'مطور النظام');
+  const [expiryDateInput, setExpiryDateInput] = useState(subscription?.expiryDate || '');
+  const [saveDevSuccess, setSaveDevSuccess] = useState(false);
   const [autoArchiveOnSale, setAutoArchiveOnSale] = useState(officeSettings.autoArchiveOnSale ?? true);
   const [appPasscode, setAppPasscode] = useState(officeSettings.appPasscode || '');
 
@@ -379,6 +398,185 @@ export function SettingsModal({
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Developer / SaaS Licensing Panel */}
+          <div className="space-y-3 bg-purple-50/50 p-4 rounded-xl border border-purple-200">
+            <h4 className="text-xs font-bold text-purple-950 flex items-center gap-1.5 pb-2 border-b border-purple-200">
+              <Settings className="w-4 h-4 text-purple-700" />
+              <span>بوابة مطور النظام والاشتراكات السحابية 🔑</span>
+            </h4>
+
+            {!isDevUnlocked ? (
+              <div className="space-y-2">
+                <p className="text-xs text-slate-600">
+                  قسم مخصص لمطور النظام لإدارة مدة التفعيل وتوليد التراخيص البرمجية للمشتركين.
+                </p>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="password"
+                    placeholder="أدخل رمز مرور المطور (07712)..."
+                    value={devPasscodeInput}
+                    onChange={(e) => {
+                      setDevPasscodeInput(e.target.value);
+                      setDevPasscodeError('');
+                    }}
+                    className="p-2 bg-white border border-slate-300 rounded-lg text-xs font-mono font-bold w-48 text-right"
+                  />
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (devPasscodeInput.trim() === '07712') {
+                        setIsDevUnlocked(true);
+                        setDevPasscodeError('');
+                      } else {
+                        setDevPasscodeError('رمز مرور المطور غير صحيح!');
+                      }
+                    }}
+                    className="px-3.5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold"
+                  >
+                    دخول المطور
+                  </button>
+                </div>
+                {devPasscodeError && (
+                  <p className="text-[11px] text-red-600 font-bold">⚠️ {devPasscodeError}</p>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-4 pt-2">
+                {/* Status info */}
+                <div className="grid grid-cols-2 gap-3 bg-white p-3 rounded-xl border border-purple-100">
+                  <div>
+                    <span className="text-[11px] text-slate-500 block">تاريخ انتهاء الاشتراك الحالي:</span>
+                    <span className="text-xs font-bold text-purple-900">{subscription?.expiryDate || 'غير محدد'}</span>
+                  </div>
+                  <div>
+                    <span className="text-[11px] text-slate-500 block">الأيام المتبقية للزبون:</span>
+                    <span className={`text-xs font-bold ${subscription && getRemainingDays(subscription.expiryDate) < 0 ? 'text-red-600' : 'text-emerald-600'}`}>
+                      {subscription ? getRemainingDays(subscription.expiryDate) : '30'} يوماً
+                    </span>
+                  </div>
+                </div>
+
+                {/* Generator controls */}
+                <div className="space-y-2 bg-purple-100/30 p-3 rounded-xl border border-purple-200">
+                  <span className="text-xs font-bold text-purple-950 block">صانع أكواد التفعيل (التراخيص):</span>
+                  <div className="flex items-center gap-2">
+                    <select
+                      value={genMonths}
+                      onChange={(e) => setGenMonths(Number(e.target.value))}
+                      className="p-2 bg-white border border-slate-300 rounded-lg text-xs text-right cursor-pointer"
+                    >
+                      <option value={1}>تفعيل لمدة شهر (+30 يوم)</option>
+                      <option value={3}>تفعيل لمدة 3 أشهر (+90 يوم)</option>
+                      <option value={6}>تفعيل لمدة 6 أشهر (+180 يوم)</option>
+                      <option value={12}>تفعيل لمدة سنة (+365 يوم)</option>
+                    </select>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const baseDate = new Date();
+                        baseDate.setDate(baseDate.getDate() + (genMonths * 30));
+                        const yyyy = baseDate.getFullYear();
+                        const mm = String(baseDate.getMonth() + 1).padStart(2, '0');
+                        const dd = String(baseDate.getDate()).padStart(2, '0');
+                        const targetDateStr = `${yyyy}-${mm}-${dd}`;
+                        
+                        try {
+                          const key = generateLicenseKey(targetDateStr);
+                          setGeneratedKey(key);
+                          setCopied(false);
+                        } catch (err) {
+                          console.error(err);
+                        }
+                      }}
+                      className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold transition-all"
+                    >
+                      توليد كود جديد 🔑
+                    </button>
+                  </div>
+
+                  {generatedKey && (
+                    <div className="mt-2 p-2.5 bg-slate-900 text-purple-400 rounded-lg border border-slate-850 flex items-center justify-between font-mono text-xs select-all">
+                      <span>{generatedKey}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard.writeText(generatedKey);
+                          setCopied(true);
+                          setTimeout(() => setCopied(false), 2000);
+                        }}
+                        className="px-2 py-1 bg-purple-650 text-white hover:bg-purple-700 rounded text-[10px] font-sans font-bold flex items-center gap-1"
+                      >
+                        {copied ? 'تم النسخ!' : 'نسخ الكود'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Editable contact/support details & manual date control */}
+                <div className="space-y-3 pt-2 border-t border-purple-200">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">اسم الدعم الفني للمطور</label>
+                      <input
+                        type="text"
+                        value={devName}
+                        onChange={(e) => setDevName(e.target.value)}
+                        className="w-full p-2 bg-white border border-slate-300 rounded-lg text-xs text-right"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">رقم هاتف المطور للتجديد</label>
+                      <input
+                        type="text"
+                        value={devPhone}
+                        onChange={(e) => setDevPhone(e.target.value)}
+                        className="w-full p-2 bg-white border border-slate-300 rounded-lg text-xs text-right"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 mb-1">تعديل تاريخ انتهاء الاشتراك يدوياً (YYYY-MM-DD)</label>
+                    <input
+                      type="text"
+                      placeholder="YYYY-MM-DD"
+                      value={expiryDateInput}
+                      onChange={(e) => setExpiryDateInput(e.target.value)}
+                      className="w-full p-2 bg-white border border-slate-300 rounded-lg text-xs font-mono font-bold text-right"
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onUpdateSubscription) {
+                        onUpdateSubscription({
+                          status: expiryDateInput && getRemainingDays(expiryDateInput) < 0 ? 'expired' : 'active',
+                          expiryDate: expiryDateInput || (subscription?.expiryDate ?? ''),
+                          developerPhone: devPhone,
+                          developerName: devName,
+                          licenseKey: generatedKey || subscription?.licenseKey || '',
+                        });
+                        setSaveDevSuccess(true);
+                        setTimeout(() => setSaveDevSuccess(false), 3000);
+                      }
+                    }}
+                    className="w-full py-2.5 bg-purple-650 hover:bg-purple-700 text-white rounded-lg text-xs font-bold shadow-sm transition-all"
+                  >
+                    حفظ ومزامنة بيانات المطور والاشتراك ☁️
+                  </button>
+
+                  {saveDevSuccess && (
+                    <p className="text-[11px] text-emerald-700 font-bold text-center bg-emerald-50 py-1.5 rounded-lg border border-emerald-200">
+                      ✨ تم حفظ ومزامنة تاريخ الاشتراك والبيانات بنجاح!
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Actions */}

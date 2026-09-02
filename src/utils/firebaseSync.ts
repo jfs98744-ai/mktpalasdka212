@@ -10,7 +10,7 @@ import {
   getDoc
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { Property, ClientRequest, Contract, OfficeSettings } from '../types';
+import { Property, ClientRequest, Contract, OfficeSettings, SubscriptionInfo } from '../types';
 
 // Generic helper to sync local array changes to a Firestore collection
 async function syncCollectionToFirestore<T extends { id: string }>(
@@ -73,7 +73,9 @@ export function useFirebaseSync(
   contracts: Contract[],
   setContracts: React.Dispatch<React.SetStateAction<Contract[]>>,
   officeSettings: OfficeSettings,
-  setOfficeSettings: React.Dispatch<React.SetStateAction<OfficeSettings>>
+  setOfficeSettings: React.Dispatch<React.SetStateAction<OfficeSettings>>,
+  subscription: SubscriptionInfo | null,
+  setSubscription: React.Dispatch<React.SetStateAction<SubscriptionInfo | null>>
 ) {
   // Store stringified versions to detect changes originating from Firestore vs. local state
   const lastPropertiesRef = useRef<string>('');
@@ -81,6 +83,7 @@ export function useFirebaseSync(
   const lastClientRequestsRef = useRef<string>('');
   const lastContractsRef = useRef<string>('');
   const lastOfficeSettingsRef = useRef<string>('');
+  const lastSubscriptionRef = useRef<string>('');
 
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -166,6 +169,32 @@ export function useFirebaseSync(
       }
     });
 
+    // 6. Subscribe to Subscription Info
+    const unsubSubscription = onSnapshot(doc(db, 'subscription', 'info'), async (snapshot) => {
+      if (!snapshot.exists()) {
+        // Create 30-day trial automatically if it doesn't exist yet
+        const trialExpiry = new Date();
+        trialExpiry.setDate(trialExpiry.getDate() + 30);
+        const yyyy = trialExpiry.getFullYear();
+        const mm = String(trialExpiry.getMonth() + 1).padStart(2, '0');
+        const dd = String(trialExpiry.getDate()).padStart(2, '0');
+        const defaultSub: SubscriptionInfo = {
+          status: 'active',
+          expiryDate: `${yyyy}-${mm}-${dd}`,
+          developerPhone: '07712345678', // Default developer phone
+          developerName: 'مطور النظام',
+        };
+        await setDoc(doc(db, 'subscription', 'info'), defaultSub);
+      } else {
+        const data = snapshot.data() as SubscriptionInfo;
+        const dataStr = JSON.stringify(data);
+        if (dataStr !== JSON.stringify(subscription)) {
+          lastSubscriptionRef.current = dataStr;
+          setSubscription(data);
+        }
+      }
+    });
+
     setIsInitialized(true);
 
     return () => {
@@ -174,6 +203,7 @@ export function useFirebaseSync(
       unsubClientRequests();
       unsubContracts();
       unsubOfficeSettings();
+      unsubSubscription();
     };
   }, []);
 
@@ -223,4 +253,14 @@ export function useFirebaseSync(
       lastOfficeSettingsRef.current = currentStr;
     }
   }, [officeSettings, isInitialized]);
+
+  useEffect(() => {
+    if (!isInitialized || !subscription) return;
+    const currentStr = JSON.stringify(subscription);
+    if (currentStr !== lastSubscriptionRef.current) {
+      setDoc(doc(db, 'subscription', 'info'), subscription, { merge: true })
+        .catch(err => console.error("Error updating subscription doc:", err));
+      lastSubscriptionRef.current = currentStr;
+    }
+  }, [subscription, isInitialized]);
 }
