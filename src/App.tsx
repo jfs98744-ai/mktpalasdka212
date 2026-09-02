@@ -42,6 +42,7 @@ import {
   generateNextClientId,
   resetToInitialData,
 } from './utils/storage';
+import { useFirebaseSync } from './utils/firebaseSync';
 
 export function App() {
   // Navigation
@@ -63,6 +64,20 @@ export function App() {
   const [clientRequests, setClientRequests] = useState<ClientRequest[]>(loadClientRequests);
   const [contracts, setContracts] = useState<Contract[]>(loadContracts);
   const [officeSettings, setOfficeSettings] = useState<OfficeSettings>(loadOfficeSettings);
+
+  // Sync with Firebase Firestore in real-time
+  useFirebaseSync(
+    properties,
+    setProperties,
+    archivedProperties,
+    setArchivedProperties,
+    clientRequests,
+    setClientRequests,
+    contracts,
+    setContracts,
+    officeSettings,
+    setOfficeSettings
+  );
 
   // Selected Entity Modals
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
