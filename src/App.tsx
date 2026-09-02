@@ -99,6 +99,27 @@ export function App() {
   // Settings Modal
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
+  // Passcode Lock States
+  const [isUnlocked, setIsUnlocked] = useState(() => {
+    return sessionStorage.getItem('app_is_unlocked') === 'true';
+  });
+  const [passcodeInput, setPasscodeInput] = useState('');
+  const [passcodeError, setPasscodeError] = useState('');
+
+  const handleUnlock = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!officeSettings.appPasscode) return;
+    
+    if (passcodeInput.trim() === officeSettings.appPasscode.trim()) {
+      setIsUnlocked(true);
+      sessionStorage.setItem('app_is_unlocked', 'true');
+      setPasscodeError('');
+      setPasscodeInput('');
+    } else {
+      setPasscodeError('رمز المرور غير صحيح! يرجى المحاولة مرة أخرى.');
+    }
+  };
+
   // Sync to LocalStorage
   useEffect(() => {
     saveProperties(properties);
@@ -571,6 +592,114 @@ export function App() {
           window.location.hash = '';
         }}
       />
+    );
+  }
+
+  const isLocked = officeSettings.appPasscode && officeSettings.appPasscode.trim() !== '' && !isUnlocked;
+
+  if (isLocked) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 text-right select-none" dir="rtl">
+        <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-center">
+          
+          {/* Header & Logo */}
+          <div className="space-y-3">
+            <div className="w-16 h-16 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded-2xl flex items-center justify-center mx-auto shadow-inner animate-pulse">
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-white font-sans">{officeSettings.officeName}</h2>
+              <p className="text-xs text-slate-400 mt-1">{officeSettings.officeTagline || 'بوابة الإدارة الآمنة'}</p>
+            </div>
+          </div>
+
+          {/* Prompt */}
+          <div className="space-y-1">
+            <span className="inline-block px-3 py-1 bg-amber-500/10 text-amber-500 border border-amber-500/20 rounded-full text-[11px] font-bold">
+              🔒 النظام مقفل لحماية البيانات
+            </span>
+            <p className="text-xs text-slate-300 mt-2">يرجى إدخال رمز المرور السري للدخول إلى لوحة التحكم</p>
+          </div>
+
+          {/* Passcode Entry Form */}
+          <form onSubmit={handleUnlock} className="space-y-4">
+            <div className="relative">
+              <input
+                type="password"
+                placeholder="أدخل رمز المرور هنا..."
+                value={passcodeInput}
+                onChange={(e) => {
+                  setPasscodeInput(e.target.value);
+                  setPasscodeError('');
+                }}
+                className="w-full py-3.5 px-4 bg-slate-950 border border-slate-800 rounded-2xl text-center text-lg font-bold font-mono tracking-widest text-amber-500 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all shadow-inner"
+                autoFocus
+              />
+            </div>
+
+            {passcodeError && (
+              <p className="text-xs text-red-400 font-bold bg-red-500/10 border border-red-500/20 py-2 rounded-xl">
+                ⚠️ {passcodeError}
+              </p>
+            )}
+
+            {/* Numeric Keypad for fast touch screen usage */}
+            <div className="grid grid-cols-3 gap-2.5 max-w-xs mx-auto pt-2">
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                <button
+                  key={num}
+                  type="button"
+                  onClick={() => {
+                    setPasscodeInput(prev => prev + num);
+                    setPasscodeError('');
+                  }}
+                  className="h-14 bg-slate-950 hover:bg-slate-800 text-white border border-slate-800/60 hover:border-slate-700/80 rounded-2xl text-lg font-bold transition-all active:scale-95 flex items-center justify-center shadow-sm"
+                >
+                  {num}
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={() => setPasscodeInput('')}
+                className="h-14 bg-slate-950/40 hover:bg-red-950/40 hover:text-red-400 text-slate-400 border border-transparent rounded-2xl text-xs font-bold transition-all flex items-center justify-center"
+              >
+                تفريغ
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setPasscodeInput(prev => prev + '0');
+                  setPasscodeError('');
+                }}
+                className="h-14 bg-slate-950 hover:bg-slate-800 text-white border border-slate-800/60 rounded-2xl text-lg font-bold transition-all flex items-center justify-center"
+              >
+                0
+              </button>
+              <button
+                type="button"
+                onClick={() => setPasscodeInput(prev => prev.slice(0, -1))}
+                className="h-14 bg-slate-950/40 hover:bg-slate-800 text-slate-400 border border-transparent rounded-2xl text-sm font-bold transition-all flex items-center justify-center"
+              >
+                حذف ⌫
+              </button>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-2xl text-sm shadow-lg shadow-amber-500/10 active:scale-[0.98] transition-all mt-4"
+            >
+              تأكيد الدخول للنظام
+            </button>
+          </form>
+
+          {/* Footer message */}
+          <p className="text-[10px] text-slate-500">
+            مؤسسة الرافدين للتسويق العقاري • جميع الحقوق محفوظة لمدير النظام
+          </p>
+        </div>
+      </div>
     );
   }
 

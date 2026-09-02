@@ -168,4 +168,5 @@ export interface OfficeSettings {
   defaultCommissionPercentage: number;
   defaultCurrency: Currency;
   autoArchiveOnSale?: boolean;
+  appPasscode?: string;
 }

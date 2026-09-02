@@ -61,6 +61,7 @@ export function SettingsModal({
     officeSettings.defaultCommissionPercentage
   );
   const [autoArchiveOnSale, setAutoArchiveOnSale] = useState(officeSettings.autoArchiveOnSale ?? true);
+  const [appPasscode, setAppPasscode] = useState(officeSettings.appPasscode || '');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,6 +77,7 @@ export function SettingsModal({
       defaultCurrency,
       defaultCommissionPercentage,
       autoArchiveOnSale,
+      appPasscode: appPasscode.trim(),
     });
     onClose();
   };
@@ -281,6 +283,38 @@ export function SettingsModal({
                   onChange={(e) => setDefaultCommissionPercentage(parseFloat(e.target.value) || 2)}
                   className="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-xs font-mono font-bold"
                 />
+              </div>
+            </div>
+          </div>
+
+          {/* App Lock / Passcode */}
+          <div className="space-y-3 bg-amber-50/40 p-4 rounded-xl border border-amber-200 text-right">
+            <h4 className="text-xs font-bold text-amber-900 flex items-center gap-1.5 pb-2 border-b border-amber-200">
+              <ShieldCheck className="w-4 h-4 text-amber-600" />
+              <span>قفل حماية الموقع العقاري (باسوورد)</span>
+            </h4>
+            <div className="space-y-2">
+              <p className="text-xs text-slate-600 leading-relaxed">
+                إذا قمت بوضع رمز مرور هنا، فلن يتمكن أي شخص من فتح الموقع أو رؤية العقارات وتعديل البيانات إلا بعد إدخال الرمز الصحيح. اتركه فارغاً لإلغاء القفل.
+              </p>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">رمز المرور الخاص بالموقع</label>
+                <input
+                  type="text"
+                  placeholder="مثال: 1234 أو كلمة مرور خاصة"
+                  value={appPasscode}
+                  onChange={(e) => setAppPasscode(e.target.value)}
+                  className="w-full sm:w-64 p-2.5 bg-white border border-slate-300 rounded-lg text-xs font-mono font-bold placeholder:text-slate-400 placeholder:font-normal text-right"
+                />
+                {appPasscode.trim() ? (
+                  <p className="text-[11px] text-emerald-700 font-bold mt-1">
+                    🔒 الموقع محمي بكلمة المرور أعلاه. يرجى حفظها جيداً لمشاركتها مع موظفي المكتب فقط!
+                  </p>
+                ) : (
+                  <p className="text-[11px] text-slate-500 mt-1">
+                    🔓 الموقع مفتوح حالياً وبدون رمز حماية.
+                  </p>
+                )}
               </div>
             </div>
           </div>
