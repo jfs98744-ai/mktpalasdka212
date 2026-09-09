@@ -474,11 +474,11 @@ export function ContractBuilderModal({
               top: 0 !important;
               width: 210mm !important;
               height: 297mm !important;
-              padding: 4mm 6mm !important;
+              padding: 10mm 12mm !important;
               margin: 0 !important;
               background: white !important;
               color: black !important;
-              border: 8px double #854d0e !important;
+              border: none !important;
               box-shadow: none !important;
               direction: rtl !important;
               box-sizing: border-box !important;
@@ -1128,75 +1128,75 @@ export function ContractBuilderModal({
               {/* OFFICIAL LEASE AGREEMENT (عقد إيجار) TEMPLATE MATCHING THE PICTURE */}
               <div 
                 id="printable-a4-document"
-                className="max-w-[210mm] mx-auto bg-white border-[16px] print:border-[8px] border-double border-[#854d0e] p-0 shadow-lg relative text-slate-950 select-text overflow-hidden print:w-[210mm] print:h-[297mm] print:min-h-[297mm]" 
+                className="max-w-[210mm] mx-auto bg-white border-none p-0 shadow-lg relative text-slate-950 select-text overflow-hidden print:w-[210mm] print:h-[297mm] print:min-h-[297mm]" 
                 style={{ minHeight: '297mm' }}
               >
                 
                 {/* Main outer content block */}
-                <div className="p-6 sm:p-10 print:p-0 space-y-4 print:space-y-1.5 flex flex-col justify-between pb-12 print:pb-0 print:h-full print:min-h-0" style={{ minHeight: '282mm' }}>
+                <div className="p-6 sm:p-10 print:p-0 space-y-4 print:space-y-1.5 flex flex-col justify-between pb-12 print:pb-0 print:h-full print:min-h-0" style={{ minHeight: '277mm' }}>
                 
                 <div className="space-y-4 print:space-y-1">
                   {/* Classical Traditional Arabic Header */}
                   <div className="flex justify-between items-center border-b-2 border-amber-800 pb-2 print:pb-1">
-                    <div className="w-1/3 text-right text-[12.5px] print:text-[11.5px] text-slate-600 font-bold space-y-1 print:space-y-0">
-                      <p>المحافظة: <span className="text-slate-900 font-black">{province}</span></p>
-                      <p>المنطقة: <span className="text-slate-900 font-black">{district}</span></p>
-                      <p>المحلة: <span className="text-slate-900 font-black">{mahalla || '........'}</span></p>
+                    <div className="w-1/3 text-right text-[14.5px] print:text-[13.5px] text-slate-800 font-black space-y-1 print:space-y-0.5">
+                      <p>المحافظة: <span className="text-slate-950 font-black">{province}</span></p>
+                      <p>المنطقة: <span className="text-slate-950 font-black">{district}</span></p>
+                      <p>المحلة: <span className="text-slate-950 font-black">{mahalla || '........'}</span></p>
                     </div>
                     
                     <div className="w-1/3 text-center">
-                      <h1 className="text-3xl print:text-2xl font-black text-[#991b1b] tracking-wider py-0.5">عقد إيجار</h1>
+                      <h1 className="text-4xl print:text-3xl font-black text-[#991b1b] tracking-wider py-1">عقد إيجار</h1>
                     </div>
 
                     <div className="w-1/3 flex flex-col items-center justify-center">
-                      <span className="text-red-600 font-black text-sm print:text-xs">No. {contractId.replace('CT-', '') || '001818'}</span>
+                      <span className="text-red-600 font-black text-base print:text-sm">No. {contractId.replace('CT-', '') || '001818'}</span>
                       {qrCodeUrl ? (
-                        <div className="mt-0.5 p-0.5 bg-white border border-amber-800 rounded shadow-sm">
-                          <img src={qrCodeUrl} alt="Verification QR" className="w-12 h-12 print:w-9 print:h-9" />
+                        <div className="mt-1 p-0.5 bg-white border border-amber-800 rounded shadow-sm">
+                          <img src={qrCodeUrl} alt="Verification QR" className="w-14 h-14 print:w-11 print:h-11" />
                         </div>
                       ) : (
-                        <div className="w-12 h-12 bg-slate-200 animate-pulse mt-0.5" />
+                        <div className="w-14 h-14 bg-slate-200 animate-pulse mt-1" />
                       )}
                     </div>
                   </div>
 
                   {/* Header metadata lines */}
-                  <div className="grid grid-cols-2 gap-y-3 print:gap-y-1 gap-x-6 text-[14px] print:text-[13px] font-extrabold pt-1">
+                  <div className="grid grid-cols-2 gap-y-3.5 print:gap-y-2.5 gap-x-6 text-[15.5px] print:text-[14.5px] font-black pt-2">
                     <div className="flex items-end gap-1">
-                      <span className="shrink-0 text-slate-700">تسلسل العقار:</span>
-                      <span className="flex-grow border-b border-dotted border-slate-700 font-black text-blue-900 px-2 text-[14.5px] print:text-[13.5px]">
+                      <span className="shrink-0 text-slate-800">تسلسل العقار:</span>
+                      <span className="flex-grow border-b-2 border-dotted border-slate-700 font-black text-blue-900 px-2 text-[16px] print:text-[15px]">
                         {registrationNo || '..........................................................'}
                       </span>
                     </div>
                     <div className="flex items-end gap-1">
-                      <span className="shrink-0 text-slate-700">رقم الأبواب:</span>
-                      <span className="flex-grow border-b border-dotted border-slate-700 font-black text-blue-900 px-2 text-center text-[14.5px] print:text-[13.5px]">
+                      <span className="shrink-0 text-slate-800">رقم الأبواب:</span>
+                      <span className="flex-grow border-b-2 border-dotted border-slate-700 font-black text-blue-900 px-2 text-center text-[16px] print:text-[15px]">
                         {houseNo || '..........................................................'}
                       </span>
                     </div>
                     <div className="flex items-end gap-1 col-span-2">
-                      <span className="shrink-0 text-slate-700">الطرف الأول:</span>
-                      <span className="flex-grow border-b border-dotted border-slate-700 font-black text-[#991b1b] text-[15.5px] print:text-[14.5px] px-2">
+                      <span className="shrink-0 text-slate-800">الطرف الأول:</span>
+                      <span className="flex-grow border-b-2 border-dotted border-slate-700 font-black text-[#991b1b] text-[17px] print:text-[16px] px-2">
                         {sellerName || '....................................................................................................'}
                       </span>
-                      <span className="shrink-0 text-slate-500 font-bold">/ المدعو المؤجر</span>
+                      <span className="shrink-0 text-slate-600 font-black">/ المدعو المؤجر</span>
                     </div>
                     <div className="flex items-end gap-1 col-span-2">
-                      <span className="shrink-0 text-slate-700">الطرف الثاني:</span>
-                      <span className="flex-grow border-b border-dotted border-slate-700 font-black text-[#1e3a8a] text-[15.5px] print:text-[14.5px] px-2">
+                      <span className="shrink-0 text-slate-800">الطرف الثاني:</span>
+                      <span className="flex-grow border-b-2 border-dotted border-slate-700 font-black text-[#1e3a8a] text-[17px] print:text-[16px] px-2">
                         {buyerName || '....................................................................................................'}
                       </span>
-                      <span className="shrink-0 text-slate-500 font-bold">/ المدعو المستأجر</span>
+                      <span className="shrink-0 text-slate-600 font-black">/ المدعو المستأجر</span>
                     </div>
                   </div>
 
                   {/* Main Paragraph Declaration */}
-                  <p className="text-[14px] print:text-[13px] text-justify leading-relaxed font-black border-t border-slate-200 pt-2.5 print:pt-1 text-slate-900">
+                  <p className="text-[15.5px] print:text-[14.5px] text-justify leading-relaxed font-black border-t-2 border-slate-300 pt-3.5 print:pt-2.5 text-slate-950">
                     أن الطرف الأول (المؤجر) قد أجر الى الطرف الثاني (المستأجر) بعد الرؤية والاطلاع العقار الموصوف أعلاه جنسه ( <span className="text-[#991b1b] underline font-black">{propType || '..................'}</span> ) لاتخاذه ( <span className="text-blue-900 underline font-black">{rentUsage || '..................'}</span> ) ببدل ايجار شهري قدره ( <span className="text-emerald-800 underline font-black">{totalAmount ? `${formatPrice(totalAmount, 'IQD')} (${tafqit(totalAmount)})` : '.............................................'}</span> ) ابتداءً من <span className="font-mono text-blue-900 underline">{rentStartDayStr} / {rentStartMonthStr} / ٢٠٢{rentStartYearStr} م</span> وفقاً للشروط الآتية :
                   </p>
 
                   {/* The 14 Terms exactly from printed image */}
-                  <div className="space-y-1.5 print:space-y-0.5 text-[12.5px] print:text-[11.5px] text-justify leading-relaxed print:leading-[1.28] text-slate-900 pr-1 select-text font-bold">
+                  <div className="space-y-3.5 print:space-y-2.5 text-[14.5px] print:text-[13.5px] text-justify leading-relaxed print:leading-[1.45] text-slate-950 pr-1 select-text font-black">
                     <p><strong>١.</strong> لا يحق للمستأجر استعماله لغير الغرض المبين في العقد الا بموافقة المؤجر التحريرية بعد ان شاهد المستأجر المأجور واطلع عليه كاملاً وقبله وتسلمه بحالته الكاملة عند الاستلام.</p>
                     <p><strong>٢.</strong> لا يجوز للمستأجر أجراء أي تغيير في المأجور مهما كان نوعه الا بعد حصول موافقة المؤجر التحريرية عند ذلك تكون كلفة التغيير على المستأجر ولا يحق له الرجوع بها على المؤجر كما لا يحق له ان يلغي هذا التغيير او المطالبة بكلفته في حالة ترك المأجور لأي سبب كان وكذلك الترميمات والاصلاح والصبغ والديكورات والتغليف وما شابه ذلك والتي يقوم بها المستأجر فتكون على نفقته الخاصة وليس له الحق بالرجوع بها على المؤجر لا قائمة ولا مستحقة للقلع.</p>
                     <p><strong>٣.</strong> لا يجوز للمستأجر الايجار من الباطن او التنازل عن المأجور كلاً أو جزءاً كما لا يجوز مشاركة غيره في المأجور الا بموافقة المؤجر التحريرية وبخلافه يعد ذلك اخلالاً بالعقد.</p>
@@ -1210,14 +1210,14 @@ export function ContractBuilderModal({
                     <p><strong>١١.</strong> ان المستأجر مسؤول عن تأشير هذا العقد في الدوائر المختصة ذات العلاقة.</p>
                     <p><strong>١٢.</strong> ان المستأجر اعلاه اقر واعترف وأويد باني لم ادفع أي مبلغ الى مالك العقار (المؤجر) عند ابرام العقد او بعد ذلك عدا الايجار المنصوص عليه في هذا العقد والله على ما اقول شهيد.</p>
                     <p><strong>١٣.</strong> ان ضريبة العقار من مسؤولية المؤجر.</p>
-                    <p className="font-extrabold text-[#b45309] text-[13px] print:text-[12px] mt-1 print:mt-0.5"><strong>١٤.</strong> حرر هذا العقد بثلاث نسخ ووقع في بغداد واستلم كل طرف نسخة منه بتاريخ : <span className="font-mono text-blue-950 underline">{dayStr} / {monthStr} / ٢٠٢{yearStr} م</span></p>
+                    <p className="font-black text-[#b45309] text-[15px] print:text-[14px] mt-1 print:mt-0.5"><strong>١٤.</strong> حرر هذا العقد بثلاث نسخ ووقع في بغداد واستلم كل طرف نسخة منه بتاريخ : <span className="font-mono text-blue-950 underline">{dayStr} / {monthStr} / ٢٠٢{yearStr} م</span></p>
                   </div>
 
                   {/* Additional/Custom Paragraphs (y) */}
                   {(extraLine1 || extraLine2 || extraLine3) && (
-                    <div className="pt-2 print:pt-1 border-t border-dashed border-amber-800/40 mt-1 print:mt-0.5">
-                      <p className="font-black text-slate-950 text-[13px] print:text-[12px] mb-1">شروط إضافية خاصة متفق عليها بين الطرفين :</p>
-                      <ul className="list-disc list-inside space-y-0.5 pr-2 font-bold text-slate-900 text-[12.5px] print:text-[11.5px]">
+                    <div className="pt-3 print:pt-2 border-t border-dashed border-amber-800/40 mt-1 print:mt-0.5">
+                      <p className="font-black text-slate-950 text-[15px] print:text-[14px] mb-1">شروط إضافية خاصة متفق عليها بين الطرفين :</p>
+                      <ul className="list-disc list-inside space-y-1.5 pr-2 font-black text-slate-950 text-[14.5px] print:text-[13.5px]">
                         {extraLine1 && <li>{extraLine1}</li>}
                         {extraLine2 && <li>{extraLine2}</li>}
                         {extraLine3 && <li>{extraLine3}</li>}
@@ -1227,60 +1227,60 @@ export function ContractBuilderModal({
                 </div>
 
                 {/* Bottom Signatures section mirroring the actual sheet */}
-                <div className="pt-3 print:pt-1 border-t-2 border-amber-800 grid grid-cols-4 gap-3 print:gap-2 text-[12px] print:text-[11px] text-slate-950">
+                <div className="pt-5 print:pt-4 border-t-2 border-amber-800 grid grid-cols-4 gap-4 print:gap-3.5 text-[13.5px] print:text-[12.5px] text-slate-950 font-black">
                   {/* Seller/Landlord block */}
-                  <div className="flex flex-col space-y-1.5 print:space-y-1">
-                    <div className="border border-amber-800/40 p-2 print:p-1.5 rounded bg-amber-50/5 space-y-1">
-                      <span className="block font-black text-[#991b1b] text-[12.5px] print:text-[11.5px] border-b border-amber-800/20 pb-0.5 text-center">الطرف الاول (المؤجر)</span>
-                      <p className="truncate">الاسم: <strong className="text-slate-900">{sellerName || '...................'}</strong></p>
-                      <p className="truncate">رقم الهوية: <span className="font-mono text-slate-700">{sellerIdNumber || '...................'}</span></p>
-                      <p className="truncate">الموبايل: <span className="font-mono text-slate-700">{sellerPhone || '...................'}</span></p>
+                  <div className="flex flex-col space-y-2 print:space-y-1.5">
+                    <div className="border-2 border-amber-800/40 p-2.5 print:p-2 rounded bg-amber-50/5 space-y-1.5">
+                      <span className="block font-black text-[#991b1b] text-[14px] print:text-[13px] border-b-2 border-amber-800/20 pb-1 text-center">الطرف الاول (المؤجر)</span>
+                      <p className="truncate">الاسم: <strong className="text-slate-950">{sellerName || '...................'}</strong></p>
+                      <p className="truncate">رقم الهوية: <span className="font-mono text-slate-800">{sellerIdNumber || '...................'}</span></p>
+                      <p className="truncate">الموبايل: <span className="font-mono text-slate-800">{sellerPhone || '...................'}</span></p>
                     </div>
-                    <div className="text-center pt-1 space-y-0.5 bg-slate-100/70 rounded py-1 border border-slate-200">
-                      <p className="font-black text-slate-950 text-[12px] print:text-[11px]">التوقيع: .....................</p>
-                      <p className="font-black text-red-700 text-[12px] print:text-[11px]">البصمة: .....................</p>
+                    <div className="text-center pt-1.5 space-y-1 bg-slate-100/70 rounded py-1.5 border border-slate-300">
+                      <p className="font-black text-slate-950 text-[13px] print:text-[12px]">التوقيع: .....................</p>
+                      <p className="font-black text-red-700 text-[13px] print:text-[12px]">البصمة: .....................</p>
                     </div>
                   </div>
 
                   {/* Witness 1 */}
-                  <div className="flex flex-col space-y-1.5 print:space-y-1">
-                    <div className="border border-amber-800/40 p-2 print:p-1.5 rounded bg-amber-50/5 space-y-1">
-                      <span className="block font-black text-slate-900 text-[12.5px] print:text-[11.5px] border-b border-amber-800/20 pb-0.5 text-center">الشاهد الأول</span>
-                      <p className="truncate">الاسم: <strong className="text-slate-900">{witness1Name || '...................'}</strong></p>
-                      <p className="truncate">الموبايل: <span className="font-mono text-slate-700">{witness1Phone || '...................'}</span></p>
+                  <div className="flex flex-col space-y-2 print:space-y-1.5">
+                    <div className="border-2 border-amber-800/40 p-2.5 print:p-2 rounded bg-amber-50/5 space-y-1.5">
+                      <span className="block font-black text-slate-950 text-[14px] print:text-[13px] border-b-2 border-amber-800/20 pb-1 text-center">الشاهد الأول</span>
+                      <p className="truncate">الاسم: <strong className="text-slate-950">{witness1Name || '...................'}</strong></p>
+                      <p className="truncate">الموبايل: <span className="font-mono text-slate-800">{witness1Phone || '...................'}</span></p>
                       <p className="truncate invisible">مخفي: ...................</p>
                     </div>
-                    <div className="text-center pt-1 space-y-0.5 bg-slate-100/70 rounded py-1 border border-slate-200">
-                      <p className="font-black text-slate-950 text-[12px] print:text-[11px]">التوقيع: .....................</p>
-                      <p className="font-black text-red-700 text-[12px] print:text-[11px]">البصمة: .....................</p>
+                    <div className="text-center pt-1.5 space-y-1 bg-slate-100/70 rounded py-1.5 border border-slate-300">
+                      <p className="font-black text-slate-950 text-[13px] print:text-[12px]">التوقيع: .....................</p>
+                      <p className="font-black text-red-700 text-[13px] print:text-[12px]">البصمة: .....................</p>
                     </div>
                   </div>
 
                   {/* Witness 2 */}
-                  <div className="flex flex-col space-y-1.5 print:space-y-1">
-                    <div className="border border-amber-800/40 p-2 print:p-1.5 rounded bg-amber-50/5 space-y-1">
-                      <span className="block font-black text-slate-900 text-[12.5px] print:text-[11.5px] border-b border-amber-800/20 pb-0.5 text-center">الشاهد الثاني</span>
-                      <p className="truncate">الاسم: <strong className="text-slate-900">{witness2Name || '...................'}</strong></p>
-                      <p className="truncate">الموبايل: <span className="font-mono text-slate-700">{witness2Phone || '...................'}</span></p>
+                  <div className="flex flex-col space-y-2 print:space-y-1.5">
+                    <div className="border-2 border-amber-800/40 p-2.5 print:p-2 rounded bg-amber-50/5 space-y-1.5">
+                      <span className="block font-black text-slate-950 text-[14px] print:text-[13px] border-b-2 border-amber-800/20 pb-1 text-center">الشاهد الثاني</span>
+                      <p className="truncate">الاسم: <strong className="text-slate-950">{witness2Name || '...................'}</strong></p>
+                      <p className="truncate">الموبايل: <span className="font-mono text-slate-800">{witness2Phone || '...................'}</span></p>
                       <p className="truncate invisible">مخفي: ...................</p>
                     </div>
-                    <div className="text-center pt-1 space-y-0.5 bg-slate-100/70 rounded py-1 border border-slate-200">
-                      <p className="font-black text-slate-950 text-[12px] print:text-[11px]">التوقيع: .....................</p>
-                      <p className="font-black text-red-700 text-[12px] print:text-[11px]">البصمة: .....................</p>
+                    <div className="text-center pt-1.5 space-y-1 bg-slate-100/70 rounded py-1.5 border border-slate-300">
+                      <p className="font-black text-slate-950 text-[13px] print:text-[12px]">التوقيع: .....................</p>
+                      <p className="font-black text-red-700 text-[13px] print:text-[12px]">البصمة: .....................</p>
                     </div>
                   </div>
 
                   {/* Buyer/Tenant block */}
-                  <div className="flex flex-col space-y-1.5 print:space-y-1">
-                    <div className="border border-amber-800/40 p-2 print:p-1.5 rounded bg-amber-50/5 space-y-1">
-                      <span className="block font-black text-blue-900 text-[12.5px] print:text-[11.5px] border-b border-amber-800/20 pb-0.5 text-center">الطرف الثاني (المستأجر)</span>
-                      <p className="truncate">الاسم: <strong className="text-slate-900">{buyerName || '...................'}</strong></p>
-                      <p className="truncate">رقم الهوية: <span className="font-mono text-slate-700">{buyerIdNumber || '...................'}</span></p>
-                      <p className="truncate">الموبايل: <span className="font-mono text-slate-700">{buyerPhone || '...................'}</span></p>
+                  <div className="flex flex-col space-y-2 print:space-y-1.5">
+                    <div className="border-2 border-amber-800/40 p-2.5 print:p-2 rounded bg-amber-50/5 space-y-1.5">
+                      <span className="block font-black text-blue-900 text-[14px] print:text-[13px] border-b-2 border-amber-800/20 pb-1 text-center">الطرف الثاني (المستأجر)</span>
+                      <p className="truncate">الاسم: <strong className="text-slate-950">{buyerName || '...................'}</strong></p>
+                      <p className="truncate">رقم الهوية: <span className="font-mono text-slate-800">{buyerIdNumber || '...................'}</span></p>
+                      <p className="truncate">الموبايل: <span className="font-mono text-slate-800">{buyerPhone || '...................'}</span></p>
                     </div>
-                    <div className="text-center pt-1 space-y-0.5 bg-slate-100/70 rounded py-1 border border-slate-200">
-                      <p className="font-black text-slate-950 text-[12px] print:text-[11px]">التوقيع: .....................</p>
-                      <p className="font-black text-red-700 text-[12px] print:text-[11px]">البصمة: .....................</p>
+                    <div className="text-center pt-1.5 space-y-1 bg-slate-100/70 rounded py-1.5 border border-slate-300">
+                      <p className="font-black text-slate-950 text-[13px] print:text-[12px]">التوقيع: .....................</p>
+                      <p className="font-black text-red-700 text-[13px] print:text-[12px]">البصمة: .....................</p>
                     </div>
                   </div>
                 </div>
@@ -1293,12 +1293,12 @@ export function ContractBuilderModal({
             {/* OFFICIAL A4 DESIGN TEMPLATE (عقد بيع وشراء الدور والأراضي السكنية والزراعية) */}
             <div 
               id="printable-a4-document"
-              className="max-w-[210mm] mx-auto bg-white border-[16px] print:border-[8px] border-double border-[#854d0e] p-0 shadow-lg relative text-slate-950 select-text overflow-hidden print:w-[210mm] print:h-[297mm] print:min-h-[297mm]" 
+              className="max-w-[210mm] mx-auto bg-white border-none p-0 shadow-lg relative text-slate-950 select-text overflow-hidden print:w-[210mm] print:h-[297mm] print:min-h-[297mm]" 
               style={{ minHeight: '297mm' }}
             >
                 
                 {/* Main outer content block with thin black frame */}
-                <div className="p-6 sm:p-10 print:p-0 space-y-4 print:space-y-1 flex flex-col justify-between pb-12 print:pb-0 print:h-full print:min-h-0" style={{ minHeight: '282mm' }}>
+                <div className="p-6 sm:p-10 print:p-0 space-y-4 print:space-y-1 flex flex-col justify-between pb-12 print:pb-0 print:h-full print:min-h-0" style={{ minHeight: '277mm' }}>
                 
                 <div className="space-y-4 print:space-y-1">
                   {/* Elegant Traditional Header Banner */}
@@ -1331,103 +1331,103 @@ export function ContractBuilderModal({
                   </div>
 
                   {/* Serial Number & Official License Row */}
-                  <div className="flex items-center justify-between px-2 pt-1.5 text-xs">
-                    <span className="font-mono text-red-600 font-black text-sm md:text-base">
+                  <div className="flex items-center justify-between px-2 pt-2 text-sm">
+                    <span className="font-mono text-red-600 font-black text-base md:text-lg">
                       № {contractId.replace('CT-', '') || '003711'}
                     </span>
-                    <span className="text-[11px] print:text-[10px] text-slate-500 font-bold">
+                    <span className="text-[12.5px] print:text-[11.5px] text-slate-700 font-black">
                       مكتب الأصدقاء للعقار | الشعب - الجمعيات | إجازة نقابة رقم: {officeSettings.licenseNumber || '٥٤٢'}
                     </span>
                   </div>
 
                   {/* Core Content Lines with dashed styling as preprinted form */}
-                  <div className="space-y-3.5 print:space-y-1.5 text-[14px] print:text-[13px] text-slate-900 leading-relaxed pt-1.5">
+                  <div className="space-y-4 print:space-y-2.5 text-[15.5px] print:text-[14.5px] text-slate-950 leading-relaxed pt-2 font-black">
                     
                     {/* Seller Line */}
                     <div className="flex items-end gap-1.5 flex-wrap">
-                      <span className="font-bold text-slate-950 shrink-0">الطرف الاول البائع :</span>
-                      <span className="flex-1 min-w-[200px] border-b border-dotted border-slate-600 pb-0.5 font-black text-[#991b1b] text-[15.5px] print:text-[14px] px-2">
+                      <span className="font-black text-slate-950 shrink-0">الطرف الاول البائع :</span>
+                      <span className="flex-grow min-w-[200px] border-b-2 border-dotted border-slate-700 pb-0.5 font-black text-[#991b1b] text-[17.5px] print:text-[16px] px-2">
                         {sellerName || '........................................................................'}
                       </span>
                     </div>
 
                     {/* Seller Address */}
-                    <div className="flex items-end gap-1.5 flex-wrap">
-                      <span className="font-bold text-slate-950 shrink-0">عنوان البائع :</span>
-                      <span className="flex-1 grid grid-cols-3 gap-2">
-                        <span className="border-b border-dotted border-slate-600 pb-0.5 px-2">
+                    <div className="flex items-end gap-1.5 flex-wrap pt-0.5">
+                      <span className="font-black text-slate-950 shrink-0">عنوان البائع :</span>
+                      <span className="flex-grow grid grid-cols-3 gap-3">
+                        <span className="border-b-2 border-dotted border-slate-700 pb-0.5 px-2">
                           محلة: <strong className="text-blue-900 font-black">{sellerMahalla || '...'}</strong>
                         </span>
-                        <span className="border-b border-dotted border-slate-600 pb-0.5 px-2">
+                        <span className="border-b-2 border-dotted border-slate-700 pb-0.5 px-2">
                           زقاق: <strong className="text-blue-900 font-black">{sellerZuqaq || '...'}</strong>
                         </span>
-                        <span className="border-b border-dotted border-slate-600 pb-0.5 px-2">
+                        <span className="border-b-2 border-dotted border-slate-700 pb-0.5 px-2">
                           دار: <strong className="text-blue-900 font-black">{sellerHouseNo || '...'}</strong>
                         </span>
                       </span>
-                      <span className="shrink-0 text-[11px] text-slate-500 font-semibold">({sellerAddress})</span>
+                      <span className="shrink-0 text-[12.5px] text-slate-600 font-black">({sellerAddress})</span>
                     </div>
 
                     {/* Buyer Line */}
-                    <div className="flex items-end gap-1.5 flex-wrap">
-                      <span className="font-bold text-slate-950 shrink-0">الطرف الثاني المشتري :</span>
-                      <span className="flex-1 min-w-[200px] border-b border-dotted border-slate-600 pb-0.5 font-black text-[#1e3a8a] text-[15.5px] print:text-[14px] px-2">
+                    <div className="flex items-end gap-1.5 flex-wrap pt-1">
+                      <span className="font-black text-slate-950 shrink-0">الطرف الثاني المشتري :</span>
+                      <span className="flex-grow min-w-[200px] border-b-2 border-dotted border-slate-700 pb-0.5 font-black text-[#1e3a8a] text-[17.5px] print:text-[16px] px-2">
                         {buyerName || '........................................................................'}
                       </span>
                     </div>
 
                     {/* Buyer Address */}
-                    <div className="flex items-end gap-1.5 flex-wrap">
-                      <span className="font-bold text-slate-950 shrink-0">عنوان المشتري :</span>
-                      <span className="flex-1 grid grid-cols-3 gap-2">
-                        <span className="border-b border-dotted border-slate-600 pb-0.5 px-2">
+                    <div className="flex items-end gap-1.5 flex-wrap pt-0.5">
+                      <span className="font-black text-slate-950 shrink-0">عنوان المشتري :</span>
+                      <span className="flex-grow grid grid-cols-3 gap-3">
+                        <span className="border-b-2 border-dotted border-slate-700 pb-0.5 px-2">
                           محلة: <strong className="text-blue-900 font-black">{buyerMahalla || '...'}</strong>
                         </span>
-                        <span className="border-b border-dotted border-slate-600 pb-0.5 px-2">
+                        <span className="border-b-2 border-dotted border-slate-700 pb-0.5 px-2">
                           زقاق: <strong className="text-blue-900 font-black">{buyerZuqaq || '...'}</strong>
                         </span>
-                        <span className="border-b border-dotted border-slate-600 pb-0.5 px-2">
+                        <span className="border-b-2 border-dotted border-slate-700 pb-0.5 px-2">
                           دار: <strong className="text-blue-900 font-black">{buyerHouseNo || '...'}</strong>
                         </span>
                       </span>
-                      <span className="shrink-0 text-[11px] text-slate-500 font-semibold">({buyerAddress})</span>
+                      <span className="shrink-0 text-[12.5px] text-slate-600 font-black">({buyerAddress})</span>
                     </div>
 
-                    <div className="text-center font-black text-slate-950 border-t border-b border-slate-200 py-1 my-2">
+                    <div className="text-center font-black text-slate-950 border-t-2 border-b-2 border-slate-300 py-2.5 my-3 text-[16px] print:text-[15px]">
                       تم الاتفاق بين الطرفين على ابرام هذا العقد وبالشروط الاتية :
                     </div>
 
                     {/* Property Specs Block */}
-                    <div className="space-y-3 print:space-y-1">
+                    <div className="space-y-4 print:space-y-2.5">
                       <div className="flex items-end gap-1.5 flex-wrap">
-                        <span className="font-black text-slate-950 shrink-0">اولاً : أ - يعترف الطرف الاول ( البائع ) بأنه قد باع الى الطرف الثاني (المشتري) الملك المفصل فيما يلي : -</span>
+                        <span className="font-black text-slate-950 shrink-0 text-[15.5px] print:text-[14.5px]">اولاً : أ - يعترف الطرف الاول ( البائع ) بأنه قد باع الى الطرف الثاني (المشتري) الملك المفصل فيما يلي : -</span>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4 pl-4">
+                      <div className="grid grid-cols-2 gap-6 pl-4 text-[15.5px] print:text-[14.5px]">
                         <div className="flex items-end gap-1">
-                          <span className="shrink-0 font-bold">نوع الملك:</span>
-                          <span className="flex-1 border-b border-dotted border-slate-600 font-black text-blue-900 pb-0.5 px-2">
+                          <span className="shrink-0 font-black text-slate-800">نوع الملك:</span>
+                          <span className="flex-1 border-b-2 border-dotted border-slate-700 font-black text-blue-900 pb-0.5 px-2">
                             {propType || '.....................................'}
                           </span>
                         </div>
                         <div className="flex items-end gap-1">
-                          <span className="shrink-0 font-bold">المساحة:</span>
-                          <span className="flex-1 border-b border-dotted border-slate-600 font-black text-blue-900 pb-0.5 px-2 text-center">
+                          <span className="shrink-0 font-black text-slate-800">المساحة:</span>
+                          <span className="flex-1 border-b-2 border-dotted border-slate-700 font-black text-blue-900 pb-0.5 px-2 text-center">
                             {propArea ? `${propArea} م²` : '.....................................'}
                           </span>
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4 pl-4">
+                      <div className="grid grid-cols-2 gap-6 pl-4 text-[15.5px] print:text-[14.5px]">
                         <div className="flex items-end gap-1">
-                          <span className="shrink-0 font-bold">الرقم والتسلسل:</span>
-                          <span className="flex-1 border-b border-dotted border-slate-600 font-black text-blue-900 pb-0.5 px-2">
+                          <span className="shrink-0 font-black text-slate-800">الرقم والتسلسل:</span>
+                          <span className="flex-1 border-b-2 border-dotted border-slate-700 font-black text-blue-900 pb-0.5 px-2">
                             {registrationNo || '.....................................'}
                           </span>
                         </div>
                         <div className="flex items-end gap-1">
-                          <span className="shrink-0 font-bold">المحلة / الحي:</span>
-                          <span className="flex-1 border-b border-dotted border-slate-600 font-black text-blue-900 pb-0.5 px-2">
+                          <span className="shrink-0 font-black text-slate-800">المحلة / الحي:</span>
+                          <span className="flex-1 border-b-2 border-dotted border-slate-700 font-black text-blue-900 pb-0.5 px-2">
                             {mahalla || '.....................................'}
                           </span>
                         </div>
@@ -1437,49 +1437,49 @@ export function ContractBuilderModal({
                     {/* Financial Blocks & Clauses (أ، ب، ج، د، هـ، و، ز، ح، ط، ي، ك، ل) */}
                     <div className="space-y-2.5 print:space-y-1 text-[13.5px] print:text-[12.5px] leading-relaxed">
                       {/* B: Total Amount */}
-                      <div className="flex items-end gap-1.5 flex-wrap">
-                        <span className="font-bold text-slate-950 shrink-0">ب - ان بدل البيع المتفق عليه هو :</span>
-                        <span className="flex-1 border-b border-dotted border-slate-600 pb-0.5 font-black text-blue-900 px-2 text-center text-[14px] print:text-[13px]">
+                      <div className="flex items-end gap-1.5 flex-wrap pt-1">
+                        <span className="font-black text-slate-950 shrink-0">ب - ان بدل البيع المتفق عليه هو :</span>
+                        <span className="flex-1 border-b-2 border-dotted border-slate-700 pb-0.5 font-black text-blue-900 px-2 text-center text-[16px] print:text-[15px]">
                           {totalAmount ? `${formatPrice(totalAmount, 'IQD')} (${tafqit(totalAmount)})` : '..........................................................................................'}
                         </span>
                       </div>
 
                       {/* C: Deposit Paid */}
-                      <div className="flex items-end gap-1.5 flex-wrap">
-                        <span className="font-bold text-slate-950 shrink-0">ج - العربون المدفوع هو :</span>
-                        <span className="flex-1 border-b border-dotted border-slate-600 pb-0.5 font-black text-emerald-800 px-2 text-center text-[14px] print:text-[13px]">
+                      <div className="flex items-end gap-1.5 flex-wrap pt-1">
+                        <span className="font-black text-slate-950 shrink-0">ج - العربون المدفوع هو :</span>
+                        <span className="flex-1 border-b-2 border-dotted border-slate-700 pb-0.5 font-black text-emerald-800 px-2 text-center text-[16px] print:text-[15px]">
                           {depositPaid ? `${formatPrice(depositPaid, 'IQD')} (${tafqit(depositPaid)})` : '..........................................................................................'}
                         </span>
                       </div>
 
                       {/* D: Remaining */}
-                      <div className="flex items-end gap-1.5 flex-wrap">
-                        <span className="font-bold text-slate-950 shrink-0">د - المتبقي من المبلغ هو :</span>
-                        <span className="flex-1 border-b border-dotted border-slate-600 pb-0.5 font-black text-amber-900 px-2 text-center text-[14px] print:text-[13px]">
+                      <div className="flex items-end gap-1.5 flex-wrap pt-1">
+                        <span className="font-black text-slate-950 shrink-0">د - المتبقي من المبلغ هو :</span>
+                        <span className="flex-1 border-b-2 border-dotted border-slate-700 pb-0.5 font-black text-amber-900 px-2 text-center text-[16px] print:text-[15px]">
                           {remainingAmount ? `${formatPrice(remainingAmount, 'IQD')} (${tafqit(remainingAmount)})` : '..........................................................................................'}
                         </span>
                       </div>
 
                       {/* E: Penalty Seller */}
-                      <div className="space-y-1 text-right">
-                        <span className="font-bold text-slate-950 block">هـ - اذا امتنع الطرف الاول (البائع) عن التنازل او نكل عن البيع بأية صورة كانت فانه يكون ملزماً بأعادة العربون ويتعهد بدفع تضمينات للمشتري قدرها :</span>
-                        <div className="w-full border-b border-dotted border-slate-600 pb-0.5 font-black text-red-900 px-2 text-center text-[14px] print:text-[13px] min-h-[22px]">
+                      <div className="space-y-2 text-right pt-1.5">
+                        <span className="font-black text-slate-950 block">هـ - اذا امتنع الطرف الاول (البائع) عن التنازل او نكل عن البيع بأية صورة كانت فانه يكون ملزماً بأعادة العربون ويتعهد بدفع تضمينات للمشتري قدرها :</span>
+                        <div className="w-full border-b-2 border-dotted border-slate-700 pb-0.5 font-black text-red-900 px-2 text-center text-[16px] print:text-[15px] min-h-[24px]">
                           {sellerPenalty ? `${formatPrice(sellerPenalty, 'IQD')} (${tafqit(sellerPenalty)})` : '..........................................................................................................................................................................................'}
                         </div>
                       </div>
 
                       {/* F: Penalty Buyer */}
-                      <div className="space-y-1 text-right">
-                        <span className="font-bold text-slate-950 block">و - يعترف الطرف الثاني (المشتري) بأنه قد قبل الشراء وفي حالة النكول عن الشراء وتأدية قصور البدل فأنه يتعهد بتأدية تضمينات للبائع قدرها :</span>
-                        <div className="w-full border-b border-dotted border-slate-600 pb-0.5 font-black text-red-900 px-2 text-center text-[14px] print:text-[13px] min-h-[22px]">
+                      <div className="space-y-2 text-right pt-1.5">
+                        <span className="font-black text-slate-950 block">و - يعترف الطرف الثاني (المشتري) بأنه قد قبل الشراء وفي حالة النكول عن الشراء وتأدية قصور البدل فأنه يتعهد بتأدية تضمينات للبائع قدرها :</span>
+                        <div className="w-full border-b-2 border-dotted border-slate-700 pb-0.5 font-black text-red-900 px-2 text-center text-[16px] print:text-[15px] min-h-[24px]">
                           {buyerPenalty ? `${formatPrice(buyerPenalty, 'IQD')} (${tafqit(buyerPenalty)})` : '..........................................................................................................................................................................................'}
                         </div>
                       </div>
 
                       {/* Date and Place right under paragraph و */}
-                      <div className="flex items-end justify-between pt-2 pb-1.5 font-black border-b border-dashed border-slate-300 my-2">
+                      <div className="flex items-end justify-between pt-3 pb-2.5 font-black border-b-2 border-dashed border-slate-300 my-3 text-[15.5px] print:text-[14.5px]">
                         <span>فبناء على حصول التراضي والايجاب والقبول قرر هذا العقد في تاريخ :</span>
-                        <div className="flex items-center gap-1 font-mono text-sm text-blue-900 pl-4">
+                        <div className="flex items-center gap-1 font-mono text-base text-blue-900 pl-4">
                           <span>{dayStr}</span>
                           <span>/</span>
                           <span>{monthStr}</span>
@@ -1489,7 +1489,7 @@ export function ContractBuilderModal({
                       </div>
 
                       {/* Standard Fixed Sequential Clauses (1 to 7) */}
-                      <div className="space-y-1.5 print:space-y-0.5 pt-2 text-[12.5px] print:text-[11.5px] leading-relaxed border-t border-slate-100 text-right font-bold" dir="rtl">
+                      <div className="space-y-3.5 print:space-y-2.5 pt-3.5 text-[14.5px] print:text-[13.5px] leading-relaxed print:leading-[1.45] border-t-2 border-slate-200 text-right font-black" dir="rtl">
                         <p><strong>١ -</strong> كل مكاتبة غير مختومة بختم المكتب تعتبر باطلة.</p>
                         <p><strong>٢ -</strong> يلتزم الطرفان بالحضور أمام مديريات التسجيل العقاري والدوائر التابعة لها.</p>
                         <p><strong>٣ -</strong> يتحمل الطرفان كافة المصاريف القانونية وأتعاب الدلالية بالكامل للمكتب العقاري.</p>
@@ -1501,18 +1501,18 @@ export function ContractBuilderModal({
                     </div>
 
                     {/* Additional Custom Remarks Section */}
-                    <div className="pt-2 border-t border-dashed border-slate-300 mt-2 text-right" dir="rtl">
-                      <p className="font-black text-slate-950 mb-1.5 text-[13px] print:text-[12px]">( ملاحظات إضافية ( خاصة )</p>
-                      <div className="space-y-1.5 text-slate-900 text-[12.5px] print:text-[11.5px] font-bold pr-1">
-                        <div className="flex items-center gap-1">
+                    <div className="pt-3 border-t-2 border-dashed border-slate-300 mt-3 text-right" dir="rtl">
+                      <p className="font-black text-slate-950 mb-2 text-[15px] print:text-[14px]">( ملاحظات إضافية ( خاصة )</p>
+                      <div className="space-y-2.5 text-slate-950 text-[14.5px] print:text-[13.5px] font-black pr-1">
+                        <div className="flex items-center gap-2">
                           <span className="shrink-0">١.</span>
-                          <span className="flex-1 border-b border-dotted border-slate-500 pb-0.5 text-right font-black text-blue-900 min-h-[16px] px-2">
+                          <span className="flex-1 border-b-2 border-dotted border-slate-700 pb-0.5 text-right font-black text-blue-900 min-h-[18px] px-2">
                             {extraLine1 || '_________________________________________________________________________________'}
                           </span>
                         </div>
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-2">
                           <span className="shrink-0">٢.</span>
-                          <span className="flex-1 border-b border-dotted border-slate-500 pb-0.5 text-right font-black text-blue-900 min-h-[16px] px-2">
+                          <span className="flex-1 border-b-2 border-dotted border-slate-700 pb-0.5 text-right font-black text-blue-900 min-h-[18px] px-2">
                             {extraLine2 || '_________________________________________________________________________________'}
                           </span>
                         </div>
@@ -1523,61 +1523,61 @@ export function ContractBuilderModal({
                 </div>
 
                 {/* Bottom Signatures section mirroring the actual sheet */}
-                <div className="pt-3 print:pt-1 border-t-2 border-slate-800 grid grid-cols-4 gap-3 print:gap-2 text-[12px] print:text-[11px] text-slate-950">
+                <div className="pt-5 print:pt-4 border-t-2 border-slate-800 grid grid-cols-4 gap-4 print:gap-3.5 text-[13.5px] print:text-[12.5px] text-slate-950 font-black">
                   
                   {/* Seller Sign block */}
-                  <div className="flex flex-col space-y-1.5 print:space-y-1">
-                    <div className="border border-slate-300 p-2 print:p-1.5 rounded bg-slate-50/40 space-y-1">
-                      <span className="block font-black text-slate-900 text-[12.5px] print:text-[11.5px] border-b border-slate-300 pb-0.5 text-center">الطرف الاول (البائع)</span>
-                      <p className="truncate">الاسم: <strong className="text-slate-900">{sellerName || '...................'}</strong></p>
-                      <p className="truncate">رقم الهوية: <span className="font-mono">{sellerIdNumber || '...................'}</span></p>
-                      <p className="truncate">الموبايل: <span className="font-mono">{sellerPhone || '...................'}</span></p>
+                  <div className="flex flex-col space-y-2 print:space-y-1.5">
+                    <div className="border-2 border-slate-300 p-2.5 print:p-2 rounded bg-slate-50/40 space-y-1.5">
+                      <span className="block font-black text-slate-900 text-[14px] print:text-[13px] border-b-2 border-slate-300 pb-1 text-center">الطرف الاول (البائع)</span>
+                      <p className="truncate">الاسم: <strong className="text-slate-950">{sellerName || '...................'}</strong></p>
+                      <p className="truncate">رقم الهوية: <span className="font-mono text-slate-800">{sellerIdNumber || '...................'}</span></p>
+                      <p className="truncate">الموبايل: <span className="font-mono text-slate-800">{sellerPhone || '...................'}</span></p>
                     </div>
-                    <div className="text-center pt-1 space-y-0.5 bg-slate-100/70 rounded py-1 border border-slate-200">
-                      <p className="font-black text-slate-950 text-[12px] print:text-[11px]">التوقيع: .....................</p>
-                      <p className="font-black text-red-700 text-[12px] print:text-[11px]">البصمة: .....................</p>
+                    <div className="text-center pt-1.5 space-y-1 bg-slate-100/70 rounded py-1.5 border border-slate-300">
+                      <p className="font-black text-slate-950 text-[13px] print:text-[12px]">التوقيع: .....................</p>
+                      <p className="font-black text-red-700 text-[13px] print:text-[12px]">البصمة: .....................</p>
                     </div>
                   </div>
 
                    {/* Witness 1 */}
-                  <div className="flex flex-col space-y-1.5 print:space-y-1">
-                    <div className="border border-slate-300 p-2 print:p-1.5 rounded bg-slate-50/40 space-y-1">
-                      <span className="block font-black text-slate-900 text-[12.5px] print:text-[11.5px] border-b border-slate-300 pb-0.5 text-center">الشاهد الاول</span>
-                      <p className="truncate">الاسم: <strong className="text-slate-900">{witness1Name || '...................'}</strong></p>
-                      <p className="truncate">الموبايل: <span className="font-mono">{witness1Phone || '...................'}</span></p>
+                  <div className="flex flex-col space-y-2 print:space-y-1.5">
+                    <div className="border-2 border-slate-300 p-2.5 print:p-2 rounded bg-slate-50/40 space-y-1.5">
+                      <span className="block font-black text-slate-900 text-[14px] print:text-[13px] border-b-2 border-slate-300 pb-1 text-center">الشاهد الاول</span>
+                      <p className="truncate">الاسم: <strong className="text-slate-950">{witness1Name || '...................'}</strong></p>
+                      <p className="truncate">الموبايل: <span className="font-mono text-slate-800">{witness1Phone || '...................'}</span></p>
                       <p className="truncate invisible">مخفي: ...................</p>
                     </div>
-                    <div className="text-center pt-1 space-y-0.5 bg-slate-100/70 rounded py-1 border border-slate-200">
-                      <p className="font-black text-slate-950 text-[12px] print:text-[11px]">التوقيع: .....................</p>
-                      <p className="font-black text-red-700 text-[12px] print:text-[11px]">البصمة: .....................</p>
+                    <div className="text-center pt-1.5 space-y-1 bg-slate-100/70 rounded py-1.5 border border-slate-300">
+                      <p className="font-black text-slate-950 text-[13px] print:text-[12px]">التوقيع: .....................</p>
+                      <p className="font-black text-red-700 text-[13px] print:text-[12px]">البصمة: .....................</p>
                     </div>
                   </div>
 
                   {/* Witness 2 */}
-                  <div className="flex flex-col space-y-1.5 print:space-y-1">
-                    <div className="border border-slate-300 p-2 print:p-1.5 rounded bg-slate-50/40 space-y-1">
-                      <span className="block font-black text-slate-900 text-[12.5px] print:text-[11.5px] border-b border-slate-300 pb-0.5 text-center">الشاهد الثاني</span>
-                      <p className="truncate">الاسم: <strong className="text-slate-900">{witness2Name || '...................'}</strong></p>
-                      <p className="truncate">الموبايل: <span className="font-mono">{witness2Phone || '...................'}</span></p>
+                  <div className="flex flex-col space-y-2 print:space-y-1.5">
+                    <div className="border-2 border-slate-300 p-2.5 print:p-2 rounded bg-slate-50/40 space-y-1.5">
+                      <span className="block font-black text-slate-900 text-[14px] print:text-[13px] border-b-2 border-slate-300 pb-1 text-center">الشاهد الثاني</span>
+                      <p className="truncate">الاسم: <strong className="text-slate-950">{witness2Name || '...................'}</strong></p>
+                      <p className="truncate">الموبايل: <span className="font-mono text-slate-800">{witness2Phone || '...................'}</span></p>
                       <p className="truncate invisible">مخفي: ...................</p>
                     </div>
-                    <div className="text-center pt-1 space-y-0.5 bg-slate-100/70 rounded py-1 border border-slate-200">
-                      <p className="font-black text-slate-950 text-[12px] print:text-[11px]">التوقيع: .....................</p>
-                      <p className="font-black text-red-700 text-[12px] print:text-[11px]">البصمة: .....................</p>
+                    <div className="text-center pt-1.5 space-y-1 bg-slate-100/70 rounded py-1.5 border border-slate-300">
+                      <p className="font-black text-slate-950 text-[13px] print:text-[12px]">التوقيع: .....................</p>
+                      <p className="font-black text-red-700 text-[13px] print:text-[12px]">البصمة: .....................</p>
                     </div>
                   </div>
 
                   {/* Buyer Sign block */}
-                  <div className="flex flex-col space-y-1.5 print:space-y-1">
-                    <div className="border border-slate-300 p-2 print:p-1.5 rounded bg-slate-50/40 space-y-1">
-                      <span className="block font-black text-slate-900 text-[12.5px] print:text-[11.5px] border-b border-slate-300 pb-0.5 text-center">الطرف الثاني (المشتري)</span>
-                      <p className="truncate">الاسم: <strong className="text-slate-900">{buyerName || '...................'}</strong></p>
-                      <p className="truncate">رقم الهوية: <span className="font-mono">{buyerIdNumber || '...................'}</span></p>
-                      <p className="truncate">الموبايل: <span className="font-mono">{buyerPhone || '...................'}</span></p>
+                  <div className="flex flex-col space-y-2 print:space-y-1.5">
+                    <div className="border-2 border-slate-300 p-2.5 print:p-2 rounded bg-slate-50/40 space-y-1.5">
+                      <span className="block font-black text-slate-900 text-[14px] print:text-[13px] border-b-2 border-slate-300 pb-1 text-center">الطرف الثاني (المشتري)</span>
+                      <p className="truncate">الاسم: <strong className="text-slate-950">{buyerName || '...................'}</strong></p>
+                      <p className="truncate">رقم الهوية: <span className="font-mono text-slate-800">{buyerIdNumber || '...................'}</span></p>
+                      <p className="truncate">الموبايل: <span className="font-mono text-slate-800">{buyerPhone || '...................'}</span></p>
                     </div>
-                    <div className="text-center pt-1 space-y-0.5 bg-slate-100/70 rounded py-1 border border-slate-200">
-                      <p className="font-black text-slate-950 text-[12px] print:text-[11px]">التوقيع: .....................</p>
-                      <p className="font-black text-red-700 text-[12px] print:text-[11px]">البصمة: .....................</p>
+                    <div className="text-center pt-1.5 space-y-1 bg-slate-100/70 rounded py-1.5 border border-slate-300">
+                      <p className="font-black text-slate-950 text-[13px] print:text-[12px]">التوقيع: .....................</p>
+                      <p className="font-black text-red-700 text-[13px] print:text-[12px]">البصمة: .....................</p>
                     </div>
                   </div>
 
