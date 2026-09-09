@@ -218,9 +218,15 @@ export function SaleRecordModal({
             border: none !important;
             box-shadow: none !important;
             direction: rtl !important;
+            box-sizing: border-box !important;
+            page-break-inside: avoid !important;
           }
           .no-print {
             display: none !important;
+          }
+          @page {
+            size: A4 portrait;
+            margin: 0 !important;
           }
         }
       `}</style>

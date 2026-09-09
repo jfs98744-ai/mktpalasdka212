@@ -97,13 +97,14 @@ export function useFirebaseSync(
         }
       } else {
         const items = snapshot.docs.map(d => d.data() as Property);
-        // Sort or maintain original order if needed (or just sort by ID/date)
         const itemsStr = JSON.stringify(items);
         if (itemsStr !== JSON.stringify(properties)) {
           lastPropertiesRef.current = itemsStr;
           setProperties(items);
         }
       }
+    }, (error) => {
+      console.error('Error listening to properties collection:', error);
     });
 
     // 2. Subscribe to Archived Properties
@@ -120,6 +121,8 @@ export function useFirebaseSync(
           setArchivedProperties(items);
         }
       }
+    }, (error) => {
+      console.error('Error listening to archivedProperties collection:', error);
     });
 
     // 3. Subscribe to Client Requests
@@ -136,6 +139,8 @@ export function useFirebaseSync(
           setClientRequests(items);
         }
       }
+    }, (error) => {
+      console.error('Error listening to clientRequests collection:', error);
     });
 
     // 4. Subscribe to Contracts
@@ -152,6 +157,8 @@ export function useFirebaseSync(
           setContracts(items);
         }
       }
+    }, (error) => {
+      console.error('Error listening to contracts collection:', error);
     });
 
     // 5. Subscribe to Office Settings
@@ -167,6 +174,8 @@ export function useFirebaseSync(
           setOfficeSettings(data);
         }
       }
+    }, (error) => {
+      console.error('Error listening to officeSettings doc:', error);
     });
 
     // 6. Subscribe to Subscription Info
@@ -193,6 +202,8 @@ export function useFirebaseSync(
           setSubscription(data);
         }
       }
+    }, (error) => {
+      console.error('Error listening to subscription doc:', error);
     });
 
     setIsInitialized(true);

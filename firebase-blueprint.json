@@ -1,0 +1,91 @@
+{
+  "entities": {
+    "Property": {
+      "title": "Property",
+      "description": "Real estate property listing",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "type": { "type": "string" },
+        "dealType": { "type": "string" },
+        "area": { "type": "number" },
+        "price": { "type": "number" },
+        "currency": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "title", "type", "dealType", "price", "status"]
+    },
+    "ClientRequest": {
+      "title": "ClientRequest",
+      "description": "Client inquiry or request for property",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "clientName": { "type": "string" },
+        "phone": { "type": "string" },
+        "dealType": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "clientName", "phone", "dealType", "status"]
+    },
+    "Contract": {
+      "title": "Contract",
+      "description": "Sale deed or rent agreement contract",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "propertyId": { "type": "string" },
+        "contractType": { "type": "string" },
+        "date": { "type": "string" }
+      },
+      "required": ["id", "propertyId", "contractType", "date"]
+    },
+    "OfficeSettings": {
+      "title": "OfficeSettings",
+      "description": "Office profile and configuration",
+      "type": "object",
+      "properties": {
+        "officeName": { "type": "string" },
+        "managerName": { "type": "string" }
+      },
+      "required": ["officeName"]
+    },
+    "SubscriptionInfo": {
+      "title": "SubscriptionInfo",
+      "description": "Subscription and license details",
+      "type": "object",
+      "properties": {
+        "status": { "type": "string" },
+        "expiryDate": { "type": "string" }
+      },
+      "required": ["status", "expiryDate"]
+    }
+  },
+  "firestore": {
+    "/properties/{propertyId}": {
+      "schema": "Property",
+      "description": "Collection of all active and listed properties"
+    },
+    "/archivedProperties/{propertyId}": {
+      "schema": "Property",
+      "description": "Collection of archived properties"
+    },
+    "/clientRequests/{requestId}": {
+      "schema": "ClientRequest",
+      "description": "Collection of client property requests"
+    },
+    "/contracts/{contractId}": {
+      "schema": "Contract",
+      "description": "Collection of real estate contracts"
+    },
+    "/officeSettings/{settingId}": {
+      "schema": "OfficeSettings",
+      "description": "Office settings document"
+    },
+    "/subscription/{subId}": {
+      "schema": "SubscriptionInfo",
+      "description": "Subscription license status document"
+    }
+  }
+}

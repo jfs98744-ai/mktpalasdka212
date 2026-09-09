@@ -270,83 +270,6 @@ export function ContractBuilderModal({
   // UI Modes
   const [viewMode, setViewMode] = useState<'form' | 'preview'>(initialContract ? 'preview' : 'form');
   const [qrCodeUrl, setQrCodeUrl] = useState<string>('');
-  const [numCopies, setNumCopies] = useState<number>(3);
-
-  const getCopyLabel = (index: number, type: 'sale_deed' | 'rent_agreement') => {
-    if (index === 0) return 'نسخة المكتب العقاري (أصلية)';
-    if (index === 1) return 'نسخة الطرف الأول (البائع)';
-    if (index === 2) {
-      return type === 'sale_deed' ? 'نسخة الطرف الثاني (المشتري)' : 'نسخة الطرف الثاني (المستأجر)';
-    }
-    return `نسخة إضافية رقم ${index - 2} معتمدة`;
-  };
-
-  const renderCopiesControlPanel = () => {
-    return (
-      <div className="bg-[#fffbeb] border-2 border-amber-500 rounded-2xl p-5 mb-6 shadow-sm text-right print:hidden max-w-[210mm] mx-auto">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 pb-4 border-b border-amber-200">
-          <div className="flex items-start gap-3">
-            <div className="p-2.5 bg-amber-100 rounded-xl text-amber-800 shrink-0">
-              <Printer className="w-6 h-6" />
-            </div>
-            <div>
-              <h4 className="font-bold text-sm text-slate-900">خيارات ومطبوعات المكاتبة الرسمية العراقية</h4>
-              <p className="text-xs text-slate-600 mt-1">
-                تم حفظ المكاتبة بنجاح في النظام وتسجيل الصفقة عقارياً ونقلها للأرشيف. يرجى تحديد عدد النسخ المراد طباعتها بالعداد أدناه:
-              </p>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-4 self-start lg:self-auto shrink-0">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-slate-700">عدد النسخ:</span>
-              <div className="flex items-center border border-slate-300 rounded-lg overflow-hidden bg-white shadow-sm">
-                <button 
-                  type="button"
-                  onClick={() => setNumCopies(prev => Math.max(1, prev - 1))}
-                  className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors"
-                >
-                  -
-                </button>
-                <span className="px-4 py-1.5 font-mono font-bold text-sm min-w-[36px] text-center text-amber-800 bg-amber-50/20">{numCopies}</span>
-                <button 
-                  type="button"
-                  onClick={() => setNumCopies(prev => Math.min(5, prev + 1))}
-                  className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-            
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="px-6 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl text-xs font-black shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all"
-            >
-              <Printer className="w-4 h-4" />
-              <span>طباعة {numCopies} نسخ معاً</span>
-            </button>
-          </div>
-        </div>
-
-        <div className="pt-4">
-          <p className="text-[11px] font-bold text-slate-500 mb-2.5 font-sans">توزيع النسخ المعينة ومسمياتها بالختم الرسمي:</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
-            {Array.from({ length: numCopies }).map((_, idx) => (
-              <div key={idx} className="flex items-center gap-2 text-xs text-slate-700 bg-white/70 px-3 py-2 rounded-xl border border-amber-200/50 shadow-sm">
-                <div className="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center text-[10px] font-extrabold shrink-0">{idx + 1}</div>
-                <div className="flex flex-col">
-                  <span className="font-bold text-slate-800 text-[11px]">{getCopyLabel(idx, contractType)}</span>
-                  <span className="text-[9px] text-slate-400">ستطبع كصفحة مستقلة مخصصة</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  };
 
   // Handle Loading Initial Contract
   useEffect(() => {
@@ -538,26 +461,35 @@ export function ContractBuilderModal({
         {/* Style tag injection for custom printing layout */}
         <style dangerouslySetInnerHTML={{__html: `
           @media print {
-            body {
+            body * {
+              visibility: hidden !important;
+              background: none !important;
+            }
+            #printable-a4-document, #printable-a4-document * {
+              visibility: visible !important;
+            }
+            #printable-a4-document {
+              position: absolute !important;
+              left: 0 !important;
+              top: 0 !important;
+              width: 210mm !important;
+              height: 297mm !important;
+              padding: 10mm 15mm !important;
+              margin: 0 !important;
               background: white !important;
               color: black !important;
+              border: none !important;
+              box-shadow: none !important;
               direction: rtl !important;
+              box-sizing: border-box !important;
+              page-break-inside: avoid !important;
             }
             .no-print {
               display: none !important;
             }
-            .print-container {
-              border: none !important;
-              padding: 0 !important;
-              margin: 0 !important;
-              box-shadow: none !important;
-              background: white !important;
-              width: 100% !important;
-              height: auto !important;
-            }
             @page {
-              size: A4;
-              margin: 12mm 10mm;
+              size: A4 portrait;
+              margin: 0 !important;
             }
           }
         `}} />
@@ -1191,42 +1123,35 @@ export function ContractBuilderModal({
             </div>
           ) : contractType === 'rent_agreement' ? (
             <div className="space-y-8 print:space-y-0">
-              {renderCopiesControlPanel()}
-              {Array.from({ length: numCopies }).map((_, idx) => (
-                <div 
-                  key={idx}
-                  className={`${idx > 0 ? 'hidden print:block' : 'block'} relative`}
-                  style={idx > 0 ? { pageBreakBefore: 'always', marginTop: '0' } : {}}
-                >
-                  {/* Stamp of copy label on the document */}
-                  <div className="absolute top-4 right-4 border-4 border-dashed border-red-500 text-red-600 font-black px-4 py-1.5 rounded-lg text-xs tracking-wider rotate-[-6deg] bg-white/95 shadow-md z-50 pointer-events-none print:block hidden">
-                    {getCopyLabel(idx, 'rent_agreement')}
-                  </div>
-
-                  {/* OFFICIAL LEASE AGREEMENT (عقد إيجار) TEMPLATE MATCHING THE PICTURE */}
-                  <div className="max-w-[210mm] mx-auto bg-white border-[16px] border-double border-[#854d0e] p-0 shadow-lg print-container relative text-slate-950 select-text overflow-hidden" style={{ minHeight: '297mm' }}>
-                    
-                    {/* Main outer content block */}
-                    <div className="p-6 sm:p-10 space-y-5 flex flex-col justify-between pb-16" style={{ minHeight: '282mm' }}>
+              
+              {/* OFFICIAL LEASE AGREEMENT (عقد إيجار) TEMPLATE MATCHING THE PICTURE */}
+              <div 
+                id="printable-a4-document"
+                className="max-w-[210mm] mx-auto bg-white border-[16px] print:border-[8px] border-double border-[#854d0e] p-0 shadow-lg relative text-slate-950 select-text overflow-hidden print:w-[210mm] print:h-[297mm] print:min-h-[297mm]" 
+                style={{ minHeight: '297mm' }}
+              >
                 
-                <div className="space-y-4">
+                {/* Main outer content block */}
+                <div className="p-6 sm:p-10 print:p-5 space-y-5 print:space-y-2.5 flex flex-col justify-between pb-16 print:pb-4 print:h-full print:min-h-0" style={{ minHeight: '282mm' }}>
+                
+                <div className="space-y-4 print:space-y-1.5">
                   {/* Classical Traditional Arabic Header */}
-                  <div className="flex justify-between items-center border-b-2 border-amber-800 pb-3">
-                    <div className="w-1/3 text-right text-[12px] text-slate-600 font-bold space-y-1">
+                  <div className="flex justify-between items-center border-b-2 border-amber-800 pb-3 print:pb-1.5">
+                    <div className="w-1/3 text-right text-[12px] print:text-[10px] text-slate-600 font-bold space-y-1 print:space-y-0">
                       <p>المحافظة: <span className="text-slate-900 font-black">{province}</span></p>
                       <p>المنطقة: <span className="text-slate-900 font-black">{district}</span></p>
                       <p>المحلة: <span className="text-slate-900 font-black">{mahalla || '........'}</span></p>
                     </div>
                     
                     <div className="w-1/3 text-center">
-                      <h1 className="text-3xl font-black text-[#991b1b] tracking-wider py-1">عقد إيجار</h1>
+                      <h1 className="text-3xl print:text-2xl font-black text-[#991b1b] tracking-wider py-1">عقد إيجار</h1>
                     </div>
 
                     <div className="w-1/3 flex flex-col items-center justify-center">
-                      <span className="text-red-600 font-bold text-sm">No. {contractId.replace('CT-', '') || '001818'}</span>
+                      <span className="text-red-600 font-bold text-sm print:text-xs">No. {contractId.replace('CT-', '') || '001818'}</span>
                       {qrCodeUrl ? (
                         <div className="mt-1 p-0.5 bg-white border border-amber-800 rounded shadow-sm">
-                          <img src={qrCodeUrl} alt="Verification QR" className="w-12 h-12" />
+                          <img src={qrCodeUrl} alt="Verification QR" className="w-12 h-12 print:w-9 print:h-9" />
                         </div>
                       ) : (
                         <div className="w-12 h-12 bg-slate-200 animate-pulse mt-1" />
@@ -1235,29 +1160,29 @@ export function ContractBuilderModal({
                   </div>
 
                   {/* Header metadata lines */}
-                  <div className="grid grid-cols-2 gap-y-3 gap-x-6 text-[13.5px] font-bold pt-2">
+                  <div className="grid grid-cols-2 gap-y-3 print:gap-y-1.5 gap-x-6 text-[13.5px] print:text-[11px] font-bold pt-2">
                     <div className="flex items-end gap-1">
                       <span className="shrink-0 text-slate-700">تسلسل العقار:</span>
-                      <span className="flex-grow border-b border-dotted border-slate-700 font-extrabold text-blue-900 px-2 text-[14px]">
+                      <span className="flex-grow border-b border-dotted border-slate-700 font-extrabold text-blue-900 px-2 text-[14px] print:text-[12px]">
                         {registrationNo || '..........................................................'}
                       </span>
                     </div>
                     <div className="flex items-end gap-1">
                       <span className="shrink-0 text-slate-700">رقم الأبواب:</span>
-                      <span className="flex-grow border-b border-dotted border-slate-700 font-extrabold text-blue-900 px-2 text-center text-[14px]">
+                      <span className="flex-grow border-b border-dotted border-slate-700 font-extrabold text-blue-900 px-2 text-center text-[14px] print:text-[12px]">
                         {houseNo || '..........................................................'}
                       </span>
                     </div>
                     <div className="flex items-end gap-1 col-span-2">
                       <span className="shrink-0 text-slate-700">الطرف الأول:</span>
-                      <span className="flex-grow border-b border-dotted border-slate-700 font-extrabold text-[#991b1b] text-[14.5px] px-2">
+                      <span className="flex-grow border-b border-dotted border-slate-700 font-extrabold text-[#991b1b] text-[14.5px] print:text-[12.5px] px-2">
                         {sellerName || '....................................................................................................'}
                       </span>
                       <span className="shrink-0 text-slate-500 font-bold">/ المدعو المؤجر</span>
                     </div>
                     <div className="flex items-end gap-1 col-span-2">
                       <span className="shrink-0 text-slate-700">الطرف الثاني:</span>
-                      <span className="flex-grow border-b border-dotted border-slate-700 font-extrabold text-[#1e3a8a] text-[14.5px] px-2">
+                      <span className="flex-grow border-b border-dotted border-slate-700 font-extrabold text-[#1e3a8a] text-[14.5px] print:text-[12.5px] px-2">
                         {buyerName || '....................................................................................................'}
                       </span>
                       <span className="shrink-0 text-slate-500 font-bold">/ المدعو المستأجر</span>
@@ -1265,12 +1190,12 @@ export function ContractBuilderModal({
                   </div>
 
                   {/* Main Paragraph Declaration */}
-                  <p className="text-[13px] text-justify leading-relaxed font-extrabold border-t border-slate-200 pt-3 text-slate-900">
+                  <p className="text-[13px] print:text-[10.5px] text-justify leading-relaxed font-extrabold border-t border-slate-200 pt-3 print:pt-1.5 text-slate-900">
                     أن الطرف الأول (المؤجر) قد أجر الى الطرف الثاني (المستأجر) بعد الرؤية والاطلاع العقار الموصوف أعلاه جنسه ( <span className="text-[#991b1b] underline font-black">{propType || '..................'}</span> ) لاتخاذه ( <span className="text-blue-900 underline font-black">{rentUsage || '..................'}</span> ) ببدل ايجار شهري قدره ( <span className="text-emerald-800 underline font-black">{totalAmount ? `${formatPrice(totalAmount, 'IQD')} (${tafqit(totalAmount)})` : '.............................................'}</span> ) ابتداءً من <span className="font-mono text-blue-900 underline">{rentStartDayStr} / {rentStartMonthStr} / ٢٠٢{rentStartYearStr} م</span> وفقاً للشروط الآتية :
                   </p>
 
                   {/* The 14 Terms exactly from printed image */}
-                  <div className="space-y-2 text-[11px] text-justify leading-relaxed text-slate-800 pr-1 select-text font-semibold">
+                  <div className="space-y-2 print:space-y-0.5 text-[11px] print:text-[9.5px] text-justify leading-relaxed print:leading-[1.25] text-slate-800 pr-1 select-text font-semibold">
                     <p><strong>١.</strong> لا يحق للمستأجر استعماله لغير الغرض المبين في العقد الا بموافقة المؤجر التحريرية بعد ان شاهد المستأجر المأجور واطلع عليه كاملاً وقبله وتسلمه بحالته الكاملة عند الاستلام.</p>
                     <p><strong>٢.</strong> لا يجوز للمستأجر أجراء أي تغيير في المأجور مهما كان نوعه الا بعد حصول موافقة المؤجر التحريرية عند ذلك تكون كلفة التغيير على المستأجر ولا يحق له الرجوع بها على المؤجر كما لا يحق له ان يلغي هذا التغيير او المطالبة بكلفته في حالة ترك المأجور لأي سبب كان وكذلك الترميمات والاصلاح والصبغ والديكورات والتغليف وما شابه ذلك والتي يقوم بها المستأجر فتكون على نفقته الخاصة وليس له الحق بالرجوع بها على المؤجر لا قائمة ولا مستحقة للقلع.</p>
                     <p><strong>٣.</strong> لا يجوز للمستأجر الايجار من الباطن او التنازل عن المأجور كلاً أو جزءاً كما لا يجوز مشاركة غيره في المأجور الا بموافقة المؤجر التحريرية وبخلافه يعد ذلك اخلالاً بالعقد.</p>
@@ -1284,14 +1209,14 @@ export function ContractBuilderModal({
                     <p><strong>١١.</strong> ان المستأجر مسؤول عن تأشير هذا العقد في الدوائر المختصة ذات العلاقة.</p>
                     <p><strong>١٢.</strong> ان المستأجر اعلاه اقر واعترف وأويد باني لم ادفع أي مبلغ الى مالك العقار (المؤجر) عند ابرام العقد او بعد ذلك عدا الايجار المنصوص عليه في هذا العقد والله على ما اقول شهيد.</p>
                     <p><strong>١٣.</strong> ان ضريبة العقار من مسؤولية المؤجر.</p>
-                    <p className="font-extrabold text-[#b45309] text-[11.5px] mt-1"><strong>١٤.</strong> حرر هذا العقد بثلاث نسخ ووقع في بغداد واستلم كل طرف نسخة منه بتاريخ : <span className="font-mono text-blue-950 underline">{dayStr} / {monthStr} / ٢٠٢{yearStr} م</span></p>
+                    <p className="font-extrabold text-[#b45309] text-[11.5px] print:text-[9.5px] mt-1 print:mt-0.5"><strong>١٤.</strong> حرر هذا العقد بثلاث نسخ ووقع في بغداد واستلم كل طرف نسخة منه بتاريخ : <span className="font-mono text-blue-950 underline">{dayStr} / {monthStr} / ٢٠٢{yearStr} م</span></p>
                   </div>
 
                   {/* Additional/Custom Paragraphs (y) */}
                   {(extraLine1 || extraLine2 || extraLine3) && (
-                    <div className="pt-2.5 border-t border-dashed border-amber-800/40 mt-1">
-                      <p className="font-bold text-slate-950 text-[12px] mb-1">شروط إضافية خاصة متفق عليها بين الطرفين :</p>
-                      <ul className="list-disc list-inside space-y-1 pr-2 font-semibold text-slate-800 text-[11px]">
+                    <div className="pt-2.5 print:pt-1 border-t border-dashed border-amber-800/40 mt-1 print:mt-0.5">
+                      <p className="font-bold text-slate-950 text-[12px] print:text-[10px] mb-1">شروط إضافية خاصة متفق عليها بين الطرفين :</p>
+                      <ul className="list-disc list-inside space-y-1 print:space-y-0 pr-2 font-semibold text-slate-800 text-[11px] print:text-[9.5px]">
                         {extraLine1 && <li>{extraLine1}</li>}
                         {extraLine2 && <li>{extraLine2}</li>}
                         {extraLine3 && <li>{extraLine3}</li>}
@@ -1301,67 +1226,53 @@ export function ContractBuilderModal({
                 </div>
 
                 {/* Bottom Signatures section mirroring the actual sheet */}
-                <div className="pt-4 border-t-2 border-amber-800 grid grid-cols-4 gap-3 text-[10.5px] text-slate-950">
+                <div className="pt-4 print:pt-2 border-t-2 border-amber-800 grid grid-cols-4 gap-3 print:gap-2 text-[10.5px] print:text-[9.5px] text-slate-950">
                   {/* Seller/Landlord block */}
-                  <div className="border border-amber-800/40 p-2.5 rounded bg-amber-50/5 space-y-1">
-                    <span className="block font-black text-[#991b1b] text-[11.5px] border-b border-amber-800/20 pb-0.5 text-center">الطرف الاول (المؤجر)</span>
+                  <div className="border border-amber-800/40 p-2.5 print:p-1.5 rounded bg-amber-50/5 space-y-1 print:space-y-0.5">
+                    <span className="block font-black text-[#991b1b] text-[11.5px] print:text-[10px] border-b border-amber-800/20 pb-0.5 text-center">الطرف الاول (المؤجر)</span>
                     <p className="truncate">الاسم: <strong className="text-slate-900">{sellerName || '...................'}</strong></p>
                     <p className="truncate">رقم الهوية: <span className="font-mono text-slate-700">{sellerIdNumber || '...................'}</span></p>
                     <p className="truncate">الموبايل: <span className="font-mono text-slate-700">{sellerPhone || '...................'}</span></p>
-                    <p className="pt-2 text-[8.5px] text-slate-400 text-center font-bold">التوقيع والبصمة:</p>
+                    <p className="pt-2 print:pt-1 text-[8.5px] text-slate-400 text-center font-bold">التوقيع والبصمة:</p>
                   </div>
 
                   {/* Witness 1 */}
-                  <div className="border border-amber-800/40 p-2.5 rounded bg-amber-50/5 space-y-1">
-                    <span className="block font-black text-slate-900 text-[11.5px] border-b border-amber-800/20 pb-0.5 text-center">الشاهد الأول</span>
+                  <div className="border border-amber-800/40 p-2.5 print:p-1.5 rounded bg-amber-50/5 space-y-1 print:space-y-0.5">
+                    <span className="block font-black text-slate-900 text-[11.5px] print:text-[10px] border-b border-amber-800/20 pb-0.5 text-center">الشاهد الأول</span>
                     <p className="truncate">الاسم: <strong className="text-slate-900">{witness1Name || '...................'}</strong></p>
                     <p className="truncate">الموبايل: <span className="font-mono text-slate-700">{witness1Phone || '...................'}</span></p>
-                    <p className="pt-3.5 text-[8.5px] text-slate-400 text-center font-bold">التوقيع والبصمة:</p>
+                    <p className="pt-3.5 print:pt-1.5 text-[8.5px] text-slate-400 text-center font-bold">التوقيع والبصمة:</p>
                   </div>
 
                   {/* Witness 2 */}
-                  <div className="border border-amber-800/40 p-2.5 rounded bg-amber-50/5 space-y-1">
-                    <span className="block font-black text-slate-900 text-[11.5px] border-b border-amber-800/20 pb-0.5 text-center">الشاهد الثاني</span>
+                  <div className="border border-amber-800/40 p-2.5 print:p-1.5 rounded bg-amber-50/5 space-y-1 print:space-y-0.5">
+                    <span className="block font-black text-slate-900 text-[11.5px] print:text-[10px] border-b border-amber-800/20 pb-0.5 text-center">الشاهد الثاني</span>
                     <p className="truncate">الاسم: <strong className="text-slate-900">{witness2Name || '...................'}</strong></p>
                     <p className="truncate">الموبايل: <span className="font-mono text-slate-700">{witness2Phone || '...................'}</span></p>
-                    <p className="pt-3.5 text-[8.5px] text-slate-400 text-center font-bold">التوقيع والبصمة:</p>
+                    <p className="pt-3.5 print:pt-1.5 text-[8.5px] text-slate-400 text-center font-bold">التوقيع والبصمة:</p>
                   </div>
 
                   {/* Buyer/Tenant block */}
-                  <div className="border border-amber-800/40 p-2.5 rounded bg-amber-50/5 space-y-1">
-                    <span className="block font-black text-blue-900 text-[11.5px] border-b border-amber-800/20 pb-0.5 text-center">الطرف الثاني (المستأجر)</span>
+                  <div className="border border-amber-800/40 p-2.5 print:p-1.5 rounded bg-amber-50/5 space-y-1 print:space-y-0.5">
+                    <span className="block font-black text-blue-900 text-[11.5px] print:text-[10px] border-b border-amber-800/20 pb-0.5 text-center">الطرف الثاني (المستأجر)</span>
                     <p className="truncate">الاسم: <strong className="text-slate-900">{buyerName || '...................'}</strong></p>
                     <p className="truncate">رقم الهوية: <span className="font-mono text-slate-700">{buyerIdNumber || '...................'}</span></p>
                     <p className="truncate">الموبايل: <span className="font-mono text-slate-700">{buyerPhone || '...................'}</span></p>
-                    <p className="pt-2 text-[8.5px] text-slate-400 text-center font-bold">التوقيع والبصمة:</p>
+                    <p className="pt-2 print:pt-1 text-[8.5px] text-slate-400 text-center font-bold">التوقيع والبصمة:</p>
                   </div>
                 </div>
-
-
 
               </div>
             </div>
           </div>
-        ))
-        }
-        {/* Rent agreement copy block end */}
-      </div>
-      ) : (
-        <div className="space-y-8 print:space-y-0">
-          {renderCopiesControlPanel()}
-          {Array.from({ length: numCopies }).map((_, idx) => (
+        ) : (
+          <div className="space-y-8 print:space-y-0">
+            {/* OFFICIAL A4 DESIGN TEMPLATE (عقد بيع وشراء الدور والأراضي السكنية والزراعية) */}
             <div 
-              key={idx}
-              className={`${idx > 0 ? 'hidden print:block' : 'block'} relative`}
-              style={idx > 0 ? { pageBreakBefore: 'always', marginTop: '0' } : {}}
+              id="printable-a4-document"
+              className="max-w-[210mm] mx-auto bg-white border border-slate-300 print:border-none p-0 shadow-lg relative text-slate-950 select-text overflow-hidden print:w-[210mm] print:h-[297mm] print:min-h-[297mm]" 
+              style={{ minHeight: '297mm' }}
             >
-              {/* Stamp of copy label on the document */}
-              <div className="absolute top-4 right-4 border-4 border-dashed border-red-500 text-red-600 font-black px-4 py-1.5 rounded-lg text-xs tracking-wider rotate-[-6deg] bg-white/95 shadow-md z-50 pointer-events-none print:block hidden">
-                {getCopyLabel(idx, 'sale_deed')}
-              </div>
-
-              {/* OFFICIAL A4 DESIGN TEMPLATE (عقد بيع وشراء الدور والأراضي السكنية والزراعية) */}
-              <div className="max-w-[210mm] mx-auto bg-white border border-slate-300 p-0 shadow-lg print-container relative text-slate-950 select-text overflow-hidden" style={{ minHeight: '297mm' }}>
                 
                 {/* Main outer content block with thin black frame */}
                 <div className="p-6 sm:p-10 space-y-6 flex flex-col justify-between" style={{ minHeight: '297mm' }}>
@@ -1630,11 +1541,7 @@ export function ContractBuilderModal({
               </div>
             </div>
           </div>
-        ))
-        }
-        {/* Sale deed copy block end */}
-      </div>
-    )}
+        )}
 
         </div>
 
